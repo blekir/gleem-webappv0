@@ -1,0 +1,114 @@
+import React, { useState, useEffect } from "react";
+import { Container, Box, Paper, Typography, Button } from "@mui/material";
+import { useTheme } from "@mui/material/styles";
+import {
+  DndContext,
+  closestCenter,
+  KeyboardSensor,
+  PointerSensor,
+  useSensor,
+  useSensors,
+} from "@dnd-kit/core";
+import {
+  useSortable,
+  arrayMove,
+  SortableContext,
+  verticalListSortingStrategy,
+  sortableKeyboardCoordinates,
+} from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
+
+const DndListAdvanced = ({
+  items,
+  setItems,
+  setCategoriesOrder,
+  product,
+  index,
+}) => {
+  const theme = useTheme();
+  const sensors = useSensors(
+    useSensor(PointerSensor),
+    useSensor(KeyboardSensor, {
+      coordinateGetter: sortableKeyboardCoordinates,
+    })
+  );
+
+  const handleDragEnd = (event) => {
+    const { active, over } = event;
+
+    if (active.id !== over.id) {
+      const oldIndex = items.findIndex((item) => item.id === active.id);
+      const newIndex = items.findIndex((item) => item.id === over.id);
+
+      setItems((items) => arrayMove(items, oldIndex, newIndex));
+      if (product) {
+        setCategoriesOrder((current) => {
+          return current.map((cat, idx) => {
+            if (cat.name === index) {
+              var temp = { ...cat };
+              temp.products = arrayMove(cat.products, oldIndex, newIndex);
+              console.log(temp);
+              return temp;
+            }
+            return cat;
+          });
+        });
+      } else {
+        setCategoriesOrder(arrayMove(items, oldIndex, newIndex));
+        console.log(arrayMove(items, oldIndex, newIndex));
+      }
+    }
+  };
+
+  return (
+    <DndContext
+      sensors={sensors}
+      collisionDetection={closestCenter}
+      onDragEnd={handleDragEnd}
+    >
+      <SortableContext items={items} strategy={verticalListSortingStrategy}>
+        {items.map((item) => (
+          <SortableItem key={item.id} id={item.id}>
+            {item.item}
+          </SortableItem>
+        ))}
+      </SortableContext>
+    </DndContext>
+  );
+};
+
+const SortableItem = ({ id, children }) => {
+  const { attributes, listeners, setNodeRef, transform, transition } =
+    useSortable({ id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
+    display: "flex",
+    flexDirection: "row",
+  };
+
+  return (
+    <div ref={setNodeRef} style={style}>
+      {/* Drag handle element */}
+      <div
+        {...attributes}
+        {...listeners}
+        style={{
+          cursor: "grab",
+          display: "flex",
+          padding: "8px",
+          marginTop: "16px",
+          touchAction: "none", // Important for mobile devices
+        }}
+      >
+        ⠿ {/* Unicode drag handle icon */}
+      </div>
+
+      {/* Item content */}
+      <div style={{ width: "60vw" }}>{children}</div>
+    </div>
+  );
+};
+
+export default DndListAdvanced;
