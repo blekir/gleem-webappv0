@@ -15,6 +15,7 @@ import {
   useTheme,
   Avatar,
   Button,
+  Stack,
 } from "@mui/material";
 import {
   SettingsOutlined,
@@ -32,6 +33,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { currentUser, logout } from "state/auth";
 import { SIDEBAR_MENU_ITEMS } from "data";
+
+import logo from "../assets/logo_big.png";
 
 function stringToColor(string) {
   let hash = 0;
@@ -61,8 +64,8 @@ const Sidebar = ({
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const { email, isAdmin, user_id, authenticated } = useSelector(
-    (state) => state.authentication
+  const { email, balance, id, authenticated } = useSelector(
+    (state) => state.authentication.user
   );
 
   useEffect(() => {
@@ -88,97 +91,119 @@ const Sidebar = ({
             "& .MuiDrawer-paper": {
               color: theme.palette.secondary,
               backgroundColor: theme.palette.background.alt,
+
               boxSizing: "border-box",
-              borderWidth: isNonMobile ? 0 : "2px",
+              // borderWidth: isNonMobile ? 1 : "2px",
               width: drawerWidth,
+              borderRight: `1px solid ${theme.palette.background[70]}`,
             },
           }}
         >
-          <Box width="100%">
-            <Box m="1.5rem 2rem 2rem 3rem">
-              <FlexBetween color={theme.palette.secondary.main}>
+          <Stack
+            direction={{ xs: "column", sm: "column" }}
+            spacing={{ xs: 0.5, sm: 2, md: 3 }}
+            useFlexGap
+            sx={{
+              height: "100%",
+              flexWrap: "wrap",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
+            <Box width="100%">
+              <Box m="1.5rem 2rem 8rem 1.5rem">
+                {/* <FlexBetween color={theme.palette.secondary.main}> */}
                 <Box
                   display="flex"
                   flexDirection="column"
                   alignItems="center"
+                  justifyContent="center"
                   gap="0.5rem"
                 >
-                  <Typography variant="h4" fontWeight="bold">
-                    GLEEM
-                  </Typography>
+                  <img
+                    src={logo}
+                    alt="GLEEM AI"
+                    width="auto"
+                    height="30px"
+                  ></img>
                 </Box>
                 {!isNonMobile && (
                   <IconButton onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
                     <ChevronLeft />
                   </IconButton>
                 )}
-              </FlexBetween>
-            </Box>
-            <List>
-              {SIDEBAR_MENU_ITEMS.map(({ name, icon }) => {
-                return (
-                  <ListItem key={name} disablePadding>
-                    <ListItemButton
-                      onClick={() => {
-                        navigate(`/${name}`);
-                        setActive(name);
-                      }}
-                      sx={{
-                        backgroundColor:
-                          active === name
-                            ? theme.palette.secondary[300]
-                            : "transparent",
-                        color:
-                          active === name
-                            ? theme.palette.primary[600]
-                            : theme.palette.secondary[100],
-                      }}
-                    >
-                      <ListItemIcon
+                {/* </FlexBetween> */}
+              </Box>
+              <List>
+                {SIDEBAR_MENU_ITEMS.map(({ name, icon, url }) => {
+                  return (
+                    <ListItem key={name} disablePadding>
+                      <ListItemButton
+                        onClick={() => {
+                          navigate(`/${url}`);
+                          setActive(url);
+                        }}
+                        disableRipple
                         sx={{
-                          ml: "2rem",
+                          backgroundColor:
+                            active === url
+                              ? theme.palette.primary[900]
+                              : "transparent",
                           color:
-                            active === name
-                              ? theme.palette.primary[600]
-                              : theme.palette.secondary[200],
+                            active === url
+                              ? theme.palette.primary[1000]
+                              : theme.palette.secondary[100],
+                          "&:hover": {
+                            backgroundColor:
+                              active === url
+                                ? theme.palette.primary[700]
+                                : theme.palette.background.main,
+                          },
                         }}
                       >
-                        {icon}
-                      </ListItemIcon>
-                      <ListItemText primary={name} />
-                      {active === name && (
-                        <ChevronRightOutlined sx={{ ml: "auto" }} />
-                      )}
-                    </ListItemButton>
-                  </ListItem>
-                );
-              })}
-            </List>
-          </Box>
-          <Box position="absolute" bottom="1rem">
-            <Divider variant="middle" />
-            <FlexBetween m="1.5rem 2rem 0 3rem" gap="1rem">
-              <Avatar src={`https://i.pravatar.cc/100?u=${email}`} />
-              <Typography>{email}</Typography>
-            </FlexBetween>
-            <Box
-              width="100%"
-              display="flex"
-              justifyContent="center"
-              alignItems="center"
-              paddingTop="20px"
-            >
-              <Button
-                variant="contained"
-                color="primary"
-                sx={{ alignSelf: "center", width: "200px" }}
-                onClick={handleLogout}
-                startIcon={<LogoutOutlined sx={{ fontSize: "25px" }} />}
-              >
-                LOG OUT
-              </Button>
+                        <ListItemIcon
+                          sx={{
+                            ml: "1rem",
+                            color:
+                              active === url
+                                ? theme.palette.primary[1000]
+                                : theme.palette.secondary[100],
+                          }}
+                        >
+                          {icon}
+                        </ListItemIcon>
+                        <ListItemText
+                          primary={name}
+                          primaryTypographyProps={{
+                            sx: {
+                              fontFamily: "Inter",
+                              color:
+                                active === url
+                                  ? theme.palette.primary[1000]
+                                  : theme.palette.secondary[100],
+                              fontWeight: active === url ? 900 : 500, // changed font weight
+                            },
+                          }}
+                        />
+
+                        {active === url && (
+                          <ChevronRightOutlined
+                            sx={{
+                              ml: "auto",
+                              color:
+                                active === url
+                                  ? theme.palette.primary[1000]
+                                  : theme.palette.secondary[200],
+                            }}
+                          />
+                        )}
+                      </ListItemButton>
+                    </ListItem>
+                  );
+                })}
+              </List>
             </Box>
-          </Box>
+          </Stack>
         </Drawer>
       )}
     </Box>

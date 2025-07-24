@@ -2,10 +2,12 @@ import { createApi } from "@reduxjs/toolkit/query/react";
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 import { userEndpoints } from "./user";
-import { authEndpoints } from "./auth";
+import { productsEndpoints } from "./products";
+import { generateEndpoints } from "./generate";
+import { paymentsEndpoints } from "./payments";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://devrest.garagefarm.net",
+  baseUrl: "https://rest-as.garagefarm.net",
   credentials: "include",
 });
 
@@ -17,14 +19,16 @@ const query = async (args, api, extraOptions) => {
 export const apiSlice = createApi({
   reducerPath: "api",
   baseQuery: query,
+  keepUnusedDataFor: 600,
   endpoints: (builder) => ({
-    ...authEndpoints(builder),
     ...userEndpoints(builder),
+    ...productsEndpoints(builder),
+    ...generateEndpoints(builder),
+    ...paymentsEndpoints(builder),
   }),
 });
 
 export const {
-  useLoginMutation,
   useGetUsersMutation,
   useAddCreditsMutation,
   useActivateMutation,
@@ -32,3 +36,26 @@ export const {
   useVersionMutation,
   useGetSubscribersMutation,
 } = apiSlice;
+
+// USER
+export const { useLoginMutation } = apiSlice;
+export const { useGetLorasQuery } = apiSlice;
+export const { useGetOrdersQuery } = apiSlice;
+export const { useGetOrderDetailsQuery } = apiSlice;
+export const { useRegisterMutation } = apiSlice;
+export const { useGetUserMutation } = apiSlice;
+export const { useRedeemPromoCodeMutation } = apiSlice;
+
+// PRODUCTS
+export const { useGetProductsQuery, useGetPromptCountQuery } = apiSlice;
+
+// GENERATE
+export const {
+  useGenerateProductMutation,
+  useBundleProductMutation,
+  useUpscalePrintMutation,
+} = apiSlice;
+
+// PAYMENTS
+export const { useCreateCheckoutSessionMutation } = apiSlice;
+export const { useGetStripeProductsQuery } = apiSlice;

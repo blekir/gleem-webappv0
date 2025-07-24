@@ -1,9 +1,9 @@
-import { useLocation, Navigate, Outlet } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useLocation, Navigate, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const RequireAuth = () => {
   const isAuthenticated = useSelector(
-    (state) => state.authentication.authenticated
+    (state) => state.authentication.user.authenticated
   );
   const location = useLocation();
 

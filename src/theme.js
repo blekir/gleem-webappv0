@@ -1,68 +1,65 @@
 // color design tokens export
 export const tokensDark = {
-  grey: {
-    0: '#ffffff', // manually adjusted
-    10: '#f6f6f6', // manually adjusted
-    50: '#f0f0f0', // manually adjusted
-    100: '#e0e0e0',
-    200: '#c2c2c2',
-    300: '#a3a3a3',
-    400: '#858585',
-    500: '#666666',
-    600: '#525252',
-    700: '#3d3d3d',
-    800: '#292929',
-    900: '#141414',
-    1000: '#000000', // manually adjusted
+  backgrounds: {
+    0: "#DDDDE4",
+    50: "#ffffff80",
+    70: "#ffffffb3", // 70% opacity of white
   },
-  // primary: {
-  //   // blue
-  //   100: '#d3d4de',
-  //   200: '#a6a9be',
-  //   300: '#7a7f9d',
-  //   400: '#4d547d',
-  //   500: '#21295c',
-  //   600: '#191F45', // manually adjusted
-  //   700: '#141937',
-  //   800: '#0d1025',
-  //   900: '#070812',
-  // },
+
   primary: {
-    100: '#d5d5d9',
-    200: '#aaabb3',
-    300: '#80818e',
-    400: '#555768',
-    500: '#2b2d42',
-    600: '#222435',
-    700: '#1a1b28',
-    800: '#11121a',
-    900: '#09090d',
+    100: "#F8F9FA",
+    200: "#E9ECEF",
+    300: "#DEE2E6",
+    400: "#CED4DA",
+    500: "#ADB5BD",
+    600: "#6C757D",
+    700: "#495057",
+    770: "#3D4755B2", // 70% opacity of color 700
+    800: "#343A40",
+    900: "#212529",
+  },
+
+  grey: {
+    0: "#DDDDE4", // manually adjusted
+    10: "#f6f6f6", // manually adjusted
+    50: "#fff", // manually adjusted
+    100: "#e0e0e0",
+    200: "#c2c2c2",
+    300: "#a3a3a3",
+    400: "#858585",
+    500: "#666666",
+    600: "#525252",
+    700: "#3d3d3d",
+
+    800: "#292929",
+    900: "#141414",
+    1000: "#000000", // manually adjusted
   },
 
   yellows: {
     // yellow
-    50: '#f0f0f0', // manually adjusted
-    100: '#fff6e0',
-    200: '#ffedc2',
-    300: '#ffe3a3',
-    400: '#ffda85',
-    500: '#ffd166',
-    600: '#cca752',
-    700: '#997d3d',
-    800: '#665429',
-    900: '#332a14',
+    50: "#2380FB", // manually adjusted
+    100: "#0F75FA",
+    200: "#056BF0",
+    300: "#0462DC",
+    400: "#0459C8",
+    500: "#0450B4",
+    600: "#0347A0",
+    700: "#033E8C",
+    800: "#033E8C",
+    900: "#023578",
   },
   secondary: {
-    50: '#f0f0f0',
-    100: '#fefdfe',
-    200: '#fcfcfd',
-    300: '#fbfafb',
-    400: '#f9f9fa',
-    500: '#f8f7f9',
-    600: '#c6c6c7',
-    700: '#959495',
-    800: '#636364',
-    900: '#323132',
+    50: "#f0f0f0",
+    100: "#fefdfe",
+    200: "#fcfcfd",
+    300: "#fbfafb",
+    400: "#f9f9fa",
+    500: "#f8f7f9",
+    600: "#c6c6c7",
+    700: "#959495",
+    800: "#636364",
+    900: "#323132",
   },
   // secondary: {
   //   50: '#f0f0f0',
@@ -100,25 +97,26 @@ export const themeSettings = (mode) => {
   return {
     palette: {
       mode: mode,
-      ...(mode === 'dark'
+      ...(mode === "dark"
         ? {
             // palette values for dark mode
             primary: {
               ...tokensDark.primary,
-              main: tokensDark.primary[400],
-              light: tokensDark.primary[400],
+
+              main: tokensDark.primary[700],
+              light: tokensDark.primary[700],
             },
             secondary: {
               ...tokensDark.secondary,
-              main: tokensDark.secondary[300],
+              main: tokensDark.secondary[900],
             },
             neutral: {
               ...tokensDark.grey,
               main: tokensDark.grey[500],
             },
             background: {
-              default: tokensDark.primary[600],
-              alt: tokensDark.primary[500],
+              default: tokensDark.primary[800],
+              alt: tokensDark.primary[900],
             },
             yellows: {
               ...tokensDark.yellows,
@@ -129,7 +127,8 @@ export const themeSettings = (mode) => {
             // palette values for light mode
             primary: {
               ...tokensLight.primary,
-              main: tokensDark.grey[50],
+
+              main: tokensDark.grey[700],
               light: tokensDark.grey[100],
             },
             secondary: {
@@ -142,8 +141,9 @@ export const themeSettings = (mode) => {
               main: tokensDark.grey[500],
             },
             background: {
-              default: tokensDark.grey[0],
-              alt: tokensDark.grey[50],
+              default: tokensDark.backgrounds[0],
+              alt: tokensDark.backgrounds[50],
+              borders: tokensDark.backgrounds[100],
             },
             yellows: {
               ...tokensLight.yellows,
@@ -152,30 +152,30 @@ export const themeSettings = (mode) => {
           }),
     },
     typography: {
-      fontFamily: ['Inter', 'sans-serif'].join(','),
+      fontFamily: ["Manrope", "sans-serif"].join(","),
       fontSize: 12,
       h1: {
-        fontFamily: ['Inter', 'sans-serif'].join(','),
+        fontFamily: ["Manrope", "sans-serif"].join(","),
         fontSize: 40,
       },
       h2: {
-        fontFamily: ['Inter', 'sans-serif'].join(','),
+        fontFamily: ["Manrope", "sans-serif"].join(","),
         fontSize: 32,
       },
       h3: {
-        fontFamily: ['Inter', 'sans-serif'].join(','),
+        fontFamily: ["Manrope", "sans-serif"].join(","),
         fontSize: 24,
       },
       h4: {
-        fontFamily: ['Inter', 'sans-serif'].join(','),
+        fontFamily: ["Manrope", "sans-serif"].join(","),
         fontSize: 20,
       },
       h5: {
-        fontFamily: ['Inter', 'sans-serif'].join(','),
+        fontFamily: ["Manrope", "sans-serif"].join(","),
         fontSize: 16,
       },
       h6: {
-        fontFamily: ['Inter', 'sans-serif'].join(','),
+        fontFamily: ["Manrope", "sans-serif"].join(","),
         fontSize: 14,
       },
     },

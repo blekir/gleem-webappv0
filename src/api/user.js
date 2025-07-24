@@ -1,36 +1,73 @@
 export const userEndpoints = (builder) => {
   return {
-    getUsers: builder.mutation({
+    login: builder.mutation({
+      query: (credentials) => ({
+        url: "/user/login",
+        method: "post",
+        credentials: "include",
+        body: { ...credentials },
+      }),
+    }),
+
+    getUser: builder.mutation({
+      query: (credentials) => ({
+        url: "/user/",
+        method: "get",
+        credentials: "include",
+      }),
+    }),
+
+    register: builder.mutation({
+      query: (credentials) => ({
+        url: "/user/register",
+        method: "post",
+        credentials: "include",
+        body: { ...credentials },
+      }),
+    }),
+    version: builder.mutation({
+      query: (credentials) => ({
+        url: "/version",
+        method: "get",
+      }),
+    }),
+    getLoras: builder.query({
       query: () => ({
-        url: '/users',
-        method: 'get',
+        url: `/user/avatars`,
+        method: "get",
       }),
     }),
-    getSubscribers: builder.mutation({
+    getOrders: builder.query({
       query: () => ({
-        url: '/subscribers',
-        method: 'get',
+        url: `/user/orders`,
+        method: "get",
+        credentials: "include",
       }),
     }),
-    addCredits: builder.mutation({
-      query: (data) => ({
-        url: '/addCredits',
-        method: 'post',
-        body: { ...data },
+    getOrderDetails: builder.query({
+      query: ({ _id }) => ({
+        url: `/user/orders/${_id}`,
+        method: "get",
+        credentials: "include",
       }),
     }),
-    activate: builder.mutation({
-      query: (data) => ({
-        url: '/activateUser',
-        method: 'post',
-        body: { ...data },
+    createCheckoutSession: builder.mutation({
+      query: () => ({
+        url: "/user/create-checkout-session",
+        method: "post",
+        credentials: "include",
       }),
     }),
-    makeAdmin: builder.mutation({
-      query: (data) => ({
-        url: '/makeAdmin',
-        method: 'post',
-        body: { ...data },
+    redeemPromoCode: builder.mutation({
+      query: ({ code }) => ({
+        url: "/user/redeem-code",
+        method: "post",
+        credentials: "include",
+        body: { code },
+      }),
+      transformErrorResponse: (response) => ({
+        status: response.status,
+        message: response.data?.msg,
       }),
     }),
   };

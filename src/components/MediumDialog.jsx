@@ -7,7 +7,8 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Slide from "@mui/material/Slide";
-import { Backdrop, useTheme } from "@mui/material";
+import { Backdrop, Box, IconButton, useTheme } from "@mui/material";
+import { CloseOutlined } from "@mui/icons-material";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -21,8 +22,9 @@ export default function MediumDialog({
   setOpen,
   setData,
   confirmButton,
-  cancelButton,
+
   blocked,
+  cancelButton = "",
   fullwidth = true,
   maxwidth = "md",
 }) {
@@ -48,8 +50,21 @@ export default function MediumDialog({
           },
         }}
       >
-        <DialogTitle>{title}</DialogTitle>
-        <DialogContent>
+        <Box display="flex" flexDirection="row" justifyContent="space-between">
+          <DialogTitle>{title}</DialogTitle>
+          <IconButton
+            onClick={() => setOpen(false)}
+            sx={{
+              "&:hover": {
+                backgroundColor: "rgb(0,0,0,0)",
+              },
+            }}
+          >
+            <CloseOutlined />
+          </IconButton>
+        </Box>
+
+        <DialogContent sx={{ overflow: "hidden" }}>
           <DialogContentText>{content}</DialogContentText>
           {children}
         </DialogContent>
