@@ -2,7 +2,14 @@ import React, { useState } from "react";
 import Skeleton from "@mui/material/Skeleton";
 import Box from "@mui/material/Box";
 
-export default function LazyImageWithSkeleton({ src, alt, width, style }) {
+export default function LazyImageWithSkeleton({
+  src,
+  alt,
+  width,
+
+  style,
+  height = "auto",
+}) {
   const [loaded, setLoaded] = useState(false);
 
   return (
@@ -11,7 +18,7 @@ export default function LazyImageWithSkeleton({ src, alt, width, style }) {
         <Skeleton
           variant="rectangular"
           width={width}
-          height={width}
+          height={height}
           sx={{ borderRadius: "15px", position: "absolute", top: 0, left: 0 }}
         />
       )}
@@ -19,7 +26,7 @@ export default function LazyImageWithSkeleton({ src, alt, width, style }) {
         src={src}
         alt={alt}
         width={width}
-        height={width}
+        height={height}
         style={{
           ...style,
           opacity: loaded ? 1 : 0,

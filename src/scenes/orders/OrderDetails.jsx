@@ -24,6 +24,7 @@ import SmallDialog from "components/SmallDialog";
 import { useSnackbar } from "notistack";
 
 import React, { Fragment, useState, useEffect } from "react";
+import useZipDownload from "hooks/useZipDownload";
 
 const Title = ({ data }) => {
   const theme = useTheme();
@@ -55,6 +56,7 @@ const Title = ({ data }) => {
 const OrderDetails = ({ isOpen, setIsOpen, setIsClose, order }) => {
   const { enqueueSnackbar } = useSnackbar();
   const theme = useTheme();
+  const handleZipDownload = useZipDownload();
   const { data, error, isLoading } = useGetOrderDetailsQuery({
     _id: order.uuid,
   });
@@ -76,7 +78,6 @@ const OrderDetails = ({ isOpen, setIsOpen, setIsClose, order }) => {
 
   const [submit] = useUpscalePrintMutation();
   const [deleteImages] = useDeleteImagesMutation();
-
   useEffect(() => {
     if (data) {
       setorderData(data.data);
@@ -149,6 +150,14 @@ const OrderDetails = ({ isOpen, setIsOpen, setIsClose, order }) => {
     } catch (error) {
       enqueueSnackbar("Error deleting images", { variant: "error" });
     }
+  };
+
+  const handleDownload = async (e) => {
+    e.preventDefault();
+    const urls = data.data.images.filter((img, index) =>
+      selectedImages.includes(index)
+    );
+    handleZipDownload(urls, orderData.product);
   };
 
   return (
@@ -279,7 +288,9 @@ const OrderDetails = ({ isOpen, setIsOpen, setIsClose, order }) => {
               <ImageDialogButtons
                 onUpscale={() => {}}
                 onShare={() => {}}
-                onDownload={() => {}}
+                onDownload={(e) => {
+                  handleDownload(e);
+                }}
                 onDelete={() => {
                   setconfirmDialogProp({
                     open: true,

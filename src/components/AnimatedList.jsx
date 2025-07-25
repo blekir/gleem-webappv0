@@ -130,53 +130,49 @@ const AnimatedList = ({
         className={`scroll-list ${!displayScrollbar ? "no-scrollbar" : ""}`}
         onScroll={handleScroll}
       >
-        {Object.keys(items).map((category, index) => (
-          <AnimatedItem key={index} delay={0.1} index={index}>
-            <>
-              {!category.includes("_") && (
-                <Typography
-                  key={`t_${index}`}
-                  sx={{
-                    alignSelf: "flex-start",
-                    color: theme.palette.primary[300],
-                    fontFamily: "Space Grotesk",
-                    fontSize: "18px",
-                    fontStyle: "normal",
-                    fontWeight: 700,
-                    lineHeight: "normal",
-                    letterSpacing: "-0.18px",
-                  }}
-                >
-                  {category}
-                </Typography>
-              )}
-              <Stack
-                key={`s_${index}`}
-                direction={{ xs: "column", sm: "row" }}
-                spacing={{ xs: 0.5, sm: 1, md: 1 }}
-                useFlexGap
+        {Object.keys(items).map((category, catIdx) => (
+          <div key={category}>
+            {!category.includes("_") && (
+              <Typography
                 sx={{
-                  flexWrap: "wrap",
-                  justifyContent: "flex-start",
-                  alignItems: "center",
-                  marginBottom: "28px",
-                  width: "100%",
+                  alignSelf: "flex-start",
+                  color: theme.palette.primary[300],
+                  fontFamily: "Space Grotesk",
+                  fontSize: "18px",
+                  fontStyle: "normal",
+                  fontWeight: 700,
+                  lineHeight: "normal",
+                  letterSpacing: "-0.18px",
                 }}
               >
-                {items[category]
-                  .filter((product) => product.name !== "Custom")
-                  .map((product) => (
-                    <Product key={product._id} data={product} custom={false} />
-                  ))}
-              </Stack>
-              {/* </Box> */}
-              {/* {data.data[category]
-              .filter((product) => product.name === "Custom")
-              .map((product) => (
-                <Product key={product._id} data={product} custom={true} />
-              ))} */}
-            </>
-          </AnimatedItem>
+                {category}
+              </Typography>
+            )}
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              spacing={{ xs: 0.5, sm: 1, md: 1 }}
+              useFlexGap
+              sx={{
+                flexWrap: "wrap",
+                justifyContent: "flex-start",
+                alignItems: "center",
+                marginBottom: "28px",
+                width: "100%",
+              }}
+            >
+              {items[category]
+                .filter((product) => product.name !== "Custom")
+                .map((product, prodIdx) => (
+                  <AnimatedItem
+                    key={`${category}_${product._id}`}
+                    delay={0.04 * prodIdx}
+                    index={prodIdx}
+                  >
+                    <Product data={product} custom={false} />
+                  </AnimatedItem>
+                ))}
+            </Stack>
+          </div>
         ))}
       </div>
       {showGradients && (

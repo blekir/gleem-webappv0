@@ -4,7 +4,7 @@ import BlurhashImage from "components/BlurhashImage";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const WIDTH = "240px";
-const HEIGHT = "147px";
+const HEIGHT = "auto";
 const Product = ({ data, custom }) => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -43,7 +43,7 @@ const Product = ({ data, custom }) => {
           }}
         >
           <BlurhashImage
-            src={data.image}
+            src={`${data.image}?size=small`}
             blurhash={data.blurhash}
             alt="thumbnail"
             width={custom ? "auto" : WIDTH}

@@ -53,28 +53,30 @@ const Products = () => {
   const [newData, setNewData] = useState({});
 
   useEffect(() => {
-    if (data) {
-      const maxItems = 5;
-      const newData = {};
-      Object.keys(data.data).forEach((category) => {
-        const products = data.data[category];
-        if (products.length <= maxItems) {
-          newData[category] = products;
-        } else {
-          let i = 0;
-          let chunkIndex = 0;
-          while (i < products.length) {
-            const chunk = products.slice(i, i + maxItems);
-            const key =
-              chunkIndex === 0 ? category : `${chunkIndex}_${category}`;
-            newData[key] = chunk;
-            i += maxItems;
-            chunkIndex++;
-          }
-        }
-      });
-      setNewData(newData);
+    if (!data) {
+      setNewData({});
+      return;
     }
+    setNewData({}); // Reset before setting new data
+    const maxItems = 99;
+    const newData = {};
+    Object.keys(data.data).forEach((category) => {
+      const products = data.data[category];
+      if (products.length <= maxItems) {
+        newData[category] = products;
+      } else {
+        let i = 0;
+        let chunkIndex = 0;
+        while (i < products.length) {
+          const chunk = products.slice(i, i + maxItems);
+          const key = chunkIndex === 0 ? category : `${chunkIndex}_${category}`;
+          newData[key] = chunk;
+          i += maxItems;
+          chunkIndex++;
+        }
+      }
+    });
+    setNewData(newData);
   }, [data]);
 
   if (isLoading || !newData)

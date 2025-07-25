@@ -79,7 +79,7 @@ const ProductDetails = ({ data, open, setOpen }) => {
             blurhash={data.samples_blur[index]}
             alt="sample"
             width="220px"
-            height="220px"
+            height="auto"
             style={{ borderRadius: "5px" }}
           ></BlurhashImage>
         ))}
@@ -119,7 +119,6 @@ const ProductDetails = ({ data, open, setOpen }) => {
 
   useEffect(() => {
     if (selectedLora) {
-      console.log("selectedLora", selectedLora);
       setMaxFiles(
         selectedLora === "pro" ? 7 : selectedLora === "normal" ? 4 : 1
       );
@@ -132,14 +131,12 @@ const ProductDetails = ({ data, open, setOpen }) => {
   }, [selectedLora]);
 
   useEffect(() => {
-    console.log("dialogData", dialogData);
     if (dialogData) {
       submitOrder();
     }
   }, [dialogData]);
 
   const submitOrder = async () => {
-    console.log("submitOrder");
     if (
       selectedLora !== "quick" &&
       selectedLora !== "normal" &&
@@ -236,7 +233,6 @@ const ProductDetails = ({ data, open, setOpen }) => {
   }, [activeStep, selectedLora, selectedBatch, images]);
 
   useEffect(() => {
-    console.log(activeStep, steps.length);
     if (
       activeStep === steps.length &&
       selectedLora !== "quick" &&
