@@ -44,6 +44,13 @@ export const userEndpoints = (builder) => {
         credentials: "include",
       }),
     }),
+    deleteOrder: builder.mutation({
+      query: ({ _id }) => ({
+        url: `/user/orders/${_id}`,
+        method: "delete",
+        credentials: "include",
+      }),
+    }),
     getOrderDetails: builder.query({
       query: ({ _id }) => ({
         url: `/user/orders/${_id}`,
@@ -51,6 +58,7 @@ export const userEndpoints = (builder) => {
         credentials: "include",
       }),
     }),
+
     createCheckoutSession: builder.mutation({
       query: () => ({
         url: "/user/create-checkout-session",
@@ -68,6 +76,14 @@ export const userEndpoints = (builder) => {
       transformErrorResponse: (response) => ({
         status: response.status,
         message: response.data?.msg,
+      }),
+    }),
+    deleteImages: builder.mutation({
+      query: ({ images }) => ({
+        url: `/images`,
+        method: "delete",
+        credentials: "include",
+        body: { images },
       }),
     }),
   };

@@ -19,6 +19,7 @@
     "dayjs": "^1.11.13",
     "face-api.js": "^0.22.2",
     "framer-motion": "^12.23.3",
+    "jszip": "^3.10.1",
     "motion": "^12.23.3",
     "notistack": "^3.0.2",
     "react": "^18.2.0",

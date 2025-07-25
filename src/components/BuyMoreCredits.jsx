@@ -32,10 +32,10 @@ const BuyMoreCredits = ({ location }) => {
         title={""}
         open={isOpen}
         setOpen={setIsOpen}
-        setClose={setIsClose}
+        setClose={() => setIsOpen(false)}
         setData={() => {}}
         maxwidth="md"
-        height="66vh"
+        height="70vh"
       >
         <Paywall closeDialog={setIsOpen} location={location.pathname} />
       </SmallDialog>

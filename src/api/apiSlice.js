@@ -42,9 +42,12 @@ export const { useLoginMutation } = apiSlice;
 export const { useGetLorasQuery } = apiSlice;
 export const { useGetOrdersQuery } = apiSlice;
 export const { useGetOrderDetailsQuery } = apiSlice;
+export const { useLazyGetOrderDetailsQuery } = apiSlice;
 export const { useRegisterMutation } = apiSlice;
 export const { useGetUserMutation } = apiSlice;
 export const { useRedeemPromoCodeMutation } = apiSlice;
+export const { useDeleteOrderMutation } = apiSlice;
+export const { useDeleteImagesMutation } = apiSlice;
 
 // PRODUCTS
 export const { useGetProductsQuery, useGetPromptCountQuery } = apiSlice;

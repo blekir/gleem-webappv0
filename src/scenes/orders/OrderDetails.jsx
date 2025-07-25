@@ -2,6 +2,7 @@ import { Check, CheckBox } from "@mui/icons-material";
 import {
   Box,
   Button,
+  CircularProgress,
   IconButton,
   Paper,
   Slide,
@@ -9,7 +10,12 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { useGetOrderDetailsQuery, useUpscalePrintMutation } from "api/apiSlice";
+import {
+  useDeleteImagesMutation,
+  useGetOrderDetailsQuery,
+  useUpscalePrintMutation,
+} from "api/apiSlice";
+import ConfirmActionDialog from "components/ConfirmActionDialog";
 import ImageDialog, { ImageDialogButtons } from "components/ImageDialog";
 import LazyImageWithSkeleton from "components/LazyImageWithSkeleton";
 import SelectionMark from "components/SelectionMark";
@@ -32,7 +38,7 @@ const Title = ({ data }) => {
         alignItems: "center",
       }}
     >
-      <Typography sx={{ fontWeight: 600 }}>{data.data.product}</Typography>
+      <Typography sx={{ fontWeight: 600 }}>{data.product}</Typography>
       <Typography
         sx={{
           fontWeight: 800,
@@ -40,7 +46,7 @@ const Title = ({ data }) => {
           color: theme.palette.yellows[700],
         }}
       >
-        {data.data.lora_type}
+        {data.lora_type}
       </Typography>
     </Stack>
   );
@@ -57,12 +63,44 @@ const OrderDetails = ({ isOpen, setIsOpen, setIsClose, order }) => {
   const [currentImage, setCurrentImage] = useState(0);
   const [hoveredIndex, setHoveredIndex] = useState(null);
   const [selectedImages, setselectedImages] = useState([]);
+  const [orderData, setorderData] = useState(null);
 
   const [success, setsuccess] = useState(false);
 
-  const [submit] = useUpscalePrintMutation();
+  const [confirmDialogProp, setconfirmDialogProp] = useState({
+    open: false,
+    title: "",
+    content: "",
+    onConfirm: () => {},
+  });
 
-  if (isLoading) return <div>Loading...</div>;
+  const [submit] = useUpscalePrintMutation();
+  const [deleteImages] = useDeleteImagesMutation();
+
+  useEffect(() => {
+    if (data) {
+      setorderData(data.data);
+    }
+  }, [data]);
+
+  if (isLoading || !orderData)
+    return (
+      <>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            flexDirection: "column",
+            gap: "10px",
+          }}
+        >
+          <CircularProgress />
+          <Typography>Loading products...</Typography>
+        </Box>
+      </>
+    );
   if (error) return <div>Error: {error.toString()}</div>;
 
   const handleOpenImageDialog = (index) => {
@@ -92,10 +130,38 @@ const OrderDetails = ({ isOpen, setIsOpen, setIsClose, order }) => {
     });
   };
 
+  const handleDeleteImages = async () => {
+    try {
+      const res = await deleteImages({
+        images: selectedImages.map((index) => orderData.images[index]),
+      }).unwrap();
+      enqueueSnackbar("Images deleted!", {
+        variant: "success",
+      });
+
+      setorderData({
+        ...orderData,
+        images: orderData.images.filter(
+          (img, index) => !selectedImages.includes(index)
+        ),
+      });
+      setselectedImages([]);
+    } catch (error) {
+      enqueueSnackbar("Error deleting images", { variant: "error" });
+    }
+  };
+
   return (
     <Fragment>
+      <ConfirmActionDialog
+        title={confirmDialogProp.title}
+        content={confirmDialogProp.content}
+        open={confirmDialogProp.open}
+        setOpen={(open) => setconfirmDialogProp({ ...confirmDialogProp, open })}
+        onConfirm={confirmDialogProp.onConfirm}
+      />
       <SmallDialog
-        title={<Title data={data} />}
+        title={<Title data={orderData} />}
         open={isOpen}
         setOpen={setIsOpen}
         setClose={setIsClose}
@@ -113,7 +179,7 @@ const OrderDetails = ({ isOpen, setIsOpen, setIsClose, order }) => {
               alignItems: "center",
             }}
           >
-            {data.data.images.map((img, index) => (
+            {orderData.images.map((img, index) => (
               <>
                 <Box
                   onClick={() => handleOpenImageDialog(index)}
@@ -214,7 +280,20 @@ const OrderDetails = ({ isOpen, setIsOpen, setIsClose, order }) => {
                 onUpscale={() => {}}
                 onShare={() => {}}
                 onDownload={() => {}}
-                onDelete={() => {}}
+                onDelete={() => {
+                  setconfirmDialogProp({
+                    open: true,
+                    title: `Delete ${
+                      selectedImages.length > 1 ? "Images" : "Image"
+                    }`,
+                    content: `Are you sure you want to delete selected ${
+                      selectedImages.length > 1 ? "images" : "image"
+                    }?`,
+                    onConfirm: () => {
+                      handleDeleteImages();
+                    },
+                  });
+                }}
                 color="white"
               />
             </Paper>
@@ -223,11 +302,11 @@ const OrderDetails = ({ isOpen, setIsOpen, setIsClose, order }) => {
       </SmallDialog>
 
       <ImageDialog
-        images={data.data.images}
+        images={orderData.images}
         open={imageDialogOpen}
         setOpen={setImageDialogOpen}
         index={currentImage}
-        title={<Title data={data} />}
+        title={<Title data={orderData} />}
       />
     </Fragment>
   );

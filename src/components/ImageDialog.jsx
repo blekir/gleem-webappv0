@@ -16,6 +16,7 @@ import {
   Hd,
   ShareOutlined,
 } from "@mui/icons-material";
+import ConfirmActionDialog from "./ConfirmActionDialog";
 
 const Transition = forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -24,6 +25,12 @@ const Transition = forwardRef(function Transition(props, ref) {
 export default function ImageDialog({ images, open, setOpen, index, title }) {
   const theme = useTheme();
   const [idx, setidx] = useState(index);
+  const [confirmDialogProp, setconfirmDialogProp] = useState({
+    open: false,
+    title: "",
+    content: "",
+    onConfirm: () => {},
+  });
 
   useEffect(() => {
     open && setidx(index);
@@ -56,8 +63,19 @@ export default function ImageDialog({ images, open, setOpen, index, title }) {
     setidx(index);
   };
 
+  const handleDelete = () => {
+    console.log("delete");
+  };
+
   return (
     <div>
+      <ConfirmActionDialog
+        title={confirmDialogProp.title}
+        content={confirmDialogProp.content}
+        open={confirmDialogProp.open}
+        setOpen={(open) => setconfirmDialogProp({ ...confirmDialogProp, open })}
+        onConfirm={confirmDialogProp.onConfirm}
+      />
       <Dialog
         open={open}
         onClose={handleClose}
@@ -131,7 +149,7 @@ export default function ImageDialog({ images, open, setOpen, index, title }) {
                 style={{
                   maxWidth: "100%",
                   height: "auto",
-                  maxHeight: "900px",
+                  maxHeight: "70vh",
                   display: "block",
                   borderRadius: 8,
                   objectFit: "cover",
@@ -175,7 +193,16 @@ export default function ImageDialog({ images, open, setOpen, index, title }) {
             onUpscale={() => {}}
             onShare={() => {}}
             onDownload={() => {}}
-            onDelete={() => {}}
+            onDelete={() => {
+              setconfirmDialogProp({
+                open: true,
+                title: "Delete Image",
+                content: "Are you sure you want to delete this image?",
+                onConfirm: () => {
+                  handleDelete();
+                },
+              });
+            }}
           />
         </DialogContent>
       </Dialog>

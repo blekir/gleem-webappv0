@@ -152,7 +152,7 @@ const Paywall = (props) => {
           }}
         >
           <img src={stars} alt="stars" width="30px" />
-          <Typography sx={{ fontSize: "1.5rem", fontWeight: "700" }}>
+          <Typography sx={{ fontSize: "1.3rem", fontWeight: "700" }}>
             Create stunning AI Avatars & Images
           </Typography>
         </motion.Box>
@@ -163,11 +163,11 @@ const Paywall = (props) => {
         >
           <Typography
             sx={{
-              fontSize: "1rem",
+              fontSize: "0.8rem",
               fontWeight: "400",
-              width: "20vw",
+              width: "100%",
               textAlign: "center",
-              color: "rgba(0, 0, 0, 0.70)",
+              color: theme.palette.text.secondary,
               marginBottom: "20px",
             }}
           >
@@ -264,7 +264,7 @@ const Paywall = (props) => {
                       sx={{
                         padding: "20px 0px",
                         width: "230px",
-                        height: "330px",
+                        height: "auto",
                       }}
                       gap="5px"
                     >
@@ -438,6 +438,7 @@ const Paywall = (props) => {
                           fontFamily: "Inter",
                           lineHeight: "18px",
                           padding: "9px 10px",
+                          marginTop: "20px",
                           background:
                             "linear-gradient(89deg, rgba(4, 39, 197, 0.80) -0.31%, rgba(191, 5, 207, 0.72) 95.16%)",
 
@@ -822,8 +823,9 @@ const Footer = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        justifyContent: "center",
+        justifySelf: "flex-end",
         gap: "10px",
-        marginTop: "32px",
       }}
     >
       <Box

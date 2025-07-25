@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 
 import {
   Box,
+  CircularProgress,
   IconButton,
   LinearProgress,
   Paper,
@@ -11,7 +12,11 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { useGetOrdersQuery } from "api/apiSlice";
+import {
+  useGetOrdersQuery,
+  useDeleteOrderMutation,
+  useLazyGetOrderDetailsQuery,
+} from "api/apiSlice";
 import LazyImageWithSkeleton from "components/LazyImageWithSkeleton";
 
 import OrderDetails from "./OrderDetails";
@@ -19,6 +24,8 @@ import { useSSE } from "contexts/SSEContext";
 import { Delete } from "@mui/icons-material";
 import { ImageDialogButtons } from "components/ImageDialog";
 import ConfirmActionDialog from "components/ConfirmActionDialog";
+import { enqueueSnackbar } from "notistack";
+import JSZip from "jszip";
 
 const Orders = () => {
   const { data, error, isLoading, refetch } = useGetOrdersQuery({
@@ -27,6 +34,15 @@ const Orders = () => {
   const theme = useTheme();
   const { orderId } = useParams();
   const navigate = useNavigate();
+  const [deleteOrder] = useDeleteOrderMutation();
+  const [
+    getOrderDetails,
+    {
+      data: orderDetails,
+      error: orderDetailsError,
+      isLoading: orderDetailsLoading,
+    },
+  ] = useLazyGetOrderDetailsQuery();
 
   const { orderProgressMap } = useSSE();
 
@@ -39,6 +55,7 @@ const Orders = () => {
     content: "",
     onConfirm: () => {},
   });
+  const [orders, setOrders] = useState([]);
   // const [ordersProgress, setOrdersProgress] = useState({});
 
   useEffect(() => {
@@ -56,6 +73,12 @@ const Orders = () => {
     }
   }, [orderId, data]);
 
+  useEffect(() => {
+    if (data?.data) {
+      setOrders(data.data);
+    }
+  }, [data]);
+
   // useEffect(() => {
   //   if (!orderDetailsOpen) {
   //     setorder(null);
@@ -63,7 +86,24 @@ const Orders = () => {
   //   }
   // }, [orderDetailsOpen]);
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading || !orders)
+    return (
+      <>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100%",
+            flexDirection: "column",
+            gap: "10px",
+          }}
+        >
+          <CircularProgress />
+          <Typography>Loading orders...</Typography>
+        </Box>
+      </>
+    );
   if (error) return <div>Error: {error.toString()}</div>;
 
   const handleOpenDialog = (ord, progress) => {
@@ -86,8 +126,69 @@ const Orders = () => {
       open: true,
       title: "Delete Order",
       content: "Are you sure you want to delete this order?",
-      onConfirm: () => console.log("delete order", uuid),
+      onConfirm: () => {
+        try {
+          deleteOrder({ _id: uuid });
+          enqueueSnackbar("Order deleted successfully", {
+            variant: "success",
+          });
+          setOrders(orders.filter((order) => order.uuid !== uuid));
+        } catch (error) {
+          console.log(error);
+          enqueueSnackbar("Failed to delete order", {
+            variant: "error",
+          });
+        }
+      },
     });
+  };
+
+  const handleDownloadOrder = async (e, uuid) => {
+    e.stopPropagation();
+    try {
+      const response = await getOrderDetails({ _id: uuid }).unwrap();
+      handleZipDownload(response.data.images, response.data.product);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleZipDownload = async (images, product) => {
+    const zip = new JSZip();
+
+    try {
+      // Fetch all images, add to zip
+      await Promise.all(
+        images.map(async (url, index) => {
+          const response = await fetch(url, { credentials: "include" });
+          if (!response.ok) throw new Error(`Failed to fetch ${url}`);
+          const blob = await response.blob();
+          zip.file(`${product}_${index}.png`, blob);
+        })
+      );
+
+      // Generate the zip file as Blob
+      const content = await zip.generateAsync({ type: "blob" });
+
+      // Create a download link and trigger it
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(content);
+      link.download = `gleem_${product}.zip`;
+      document.body.appendChild(link);
+      link.click();
+
+      // Cleanup link element
+      link.remove();
+      URL.revokeObjectURL(link.href);
+      enqueueSnackbar("Images downloaded successfully", {
+        variant: "success",
+      });
+    } catch (error) {
+      console.error("Error generating zip:", error);
+      enqueueSnackbar("There was an error downloading the images.", {
+        variant: "error",
+      });
+    }
   };
 
   return (
@@ -109,95 +210,92 @@ const Orders = () => {
           alignItems: "center",
         }}
       >
-        {data.data
-          .filter((order) => !order.uuid.includes("_upscale"))
-          .map((ord, index) => {
-            const progress = orderProgressMap[ord.uuid] ?? {
-                overall_progress: ord.progress,
-                training_finished: false,
-                training_progress: 0,
-              } ?? {
-                overall_progress: 0,
-                training_finished: false,
-                training_progress: 0,
-              };
-            return (
-              <>
-                <Box
-                  key={index}
-                  sx={{
-                    transition: "transform 0.2s",
-                    position: "relative",
+        {orders.map((ord, index) => {
+          const progress = orderProgressMap[ord.uuid] ?? {
+              overall_progress: ord.progress,
+              training_finished: false,
+              training_progress: 0,
+            } ?? {
+              overall_progress: 0,
+              training_finished: false,
+              training_progress: 0,
+            };
+          return (
+            <>
+              <Box
+                key={index}
+                sx={{
+                  transition: "transform 0.2s",
+                  position: "relative",
 
-                    "&:hover": {
-                      transform: "scale(1.03)",
-                      cursor:
-                        progress.overall_progress !== 100 ? "wait" : "pointer",
-                    },
-                  }}
-                  onClick={() =>
-                    handleOpenDialog(ord, progress.overall_progress)
-                  }
-                  onMouseEnter={() => {
-                    setHoveredIndex(index);
-                  }}
-                  onMouseLeave={() => {
-                    setHoveredIndex(null);
-                  }}
-                >
-                  <Box sx={{ position: "relative" }}>
-                    <OrderTile
-                      img={ord.thumb}
-                      status={ord.status}
-                      orderProgress={progress}
-                      refetch={refetch}
-                    />
-                    {progress.overall_progress === 100 &&
-                      hoveredIndex === index && (
-                        <Paper
-                          elevation={10}
-                          sx={{
-                            display: "flex",
-                            justifyContent: "center",
-                            flexDirection: "column",
-                            marginTop: "20px",
-                            marginBottom: "0px",
-                            position: "absolute",
-                            bottom: 0,
-                            left: "50%",
-                            transform: "translateX(-50%)",
-                            backgroundColor: "rgba(35, 106, 240, 0.7)",
-                            padding: "10px",
-                            borderRadius: "0px 0px 15px 15px",
-                            width: "100%",
-                            height: "55px",
-                            backdropFilter: "blur(2px)",
-                            boxShadow: "0px 0px 30px 0px rgba(0, 0, 0, 0.5)",
+                  "&:hover": {
+                    transform: "scale(1.03)",
+                    cursor:
+                      progress.overall_progress !== 100 ? "wait" : "pointer",
+                  },
+                }}
+                onClick={() => handleOpenDialog(ord, progress.overall_progress)}
+                onMouseEnter={() => {
+                  setHoveredIndex(index);
+                }}
+                onMouseLeave={() => {
+                  setHoveredIndex(null);
+                }}
+              >
+                <Box sx={{ position: "relative" }}>
+                  <OrderTile
+                    img={ord.thumb}
+                    status={ord.status}
+                    orderProgress={progress}
+                    refetch={refetch}
+                  />
+                  {progress.overall_progress === 100 &&
+                    hoveredIndex === index && (
+                      <Paper
+                        elevation={10}
+                        sx={{
+                          display: "flex",
+                          justifyContent: "center",
+                          flexDirection: "column",
+                          marginTop: "20px",
+                          marginBottom: "0px",
+                          position: "absolute",
+                          bottom: 0,
+                          left: "50%",
+                          transform: "translateX(-50%)",
+                          backgroundColor: "rgba(35, 106, 240, 0.7)",
+                          padding: "10px",
+                          borderRadius: "0px 0px 15px 15px",
+                          width: "100%",
+                          height: "55px",
+                          backdropFilter: "blur(2px)",
+                          boxShadow: "0px 0px 30px 0px rgba(0, 0, 0, 0.5)",
+                        }}
+                      >
+                        <ImageDialogButtons
+                          onUpscale={(e) => {
+                            e.stopPropagation();
                           }}
-                        >
-                          <ImageDialogButtons
-                            onUpscale={(e) => {
-                              e.stopPropagation();
-                            }}
-                            onShare={(e) => {
-                              e.stopPropagation();
-                            }}
-                            onDownload={(e) => {
-                              e.stopPropagation();
-                            }}
-                            onDelete={(e) => {
-                              handleDeleteOrder(e, ord.uuid);
-                            }}
-                            size="small"
-                            color="white"
-                          />
-                        </Paper>
-                      )}
-                  </Box>
+                          onShare={(e) => {
+                            e.stopPropagation();
+                          }}
+                          onDownload={(e) => {
+                            console.log("downloading order", ord.uuid);
+                            handleDownloadOrder(e, ord.uuid);
+                          }}
+                          onDelete={(e) => {
+                            handleDeleteOrder(e, ord.uuid);
+                          }}
+                          size="small"
+                          color="white"
+                        />
+                      </Paper>
+                    )}
                 </Box>
-              </>
-            );
-          })}
+              </Box>
+            </>
+          );
+        })}
       </Stack>
       {order !== -1 && (
         <OrderDetails
