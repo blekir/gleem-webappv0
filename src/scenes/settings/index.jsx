@@ -88,16 +88,16 @@ const Settings = () => {
         useFlexGap
         sx={{
           flexWrap: "wrap",
-          justifyContent: "flex-start",
-          alignItems: "flex-start",
+          justifyContent: { xs: "center", md: "flex-start" },
+          alignItems: { xs: "center", sm: "flex-start" },
           marginTop: "0px",
-          padding: "96px",
+          padding: { xs: "20px", sm: "96px" },
         }}
       >
         <InnerFrame height="auto">
           <Box
             sx={{
-              width: "280px",
+              width: { xs: "80vw", md: "280px" },
 
               padding: "18px",
               display: "flex",
@@ -138,7 +138,7 @@ const Settings = () => {
         <InnerFrame height="auto">
           <Box
             sx={{
-              width: "280px",
+              width: { xs: "80vw", md: "280px" },
               height: "auto",
               padding: "18px",
               display: "flex",
@@ -177,11 +177,11 @@ const Settings = () => {
         setOpen={setShowPromoCodeDialog}
         setClose={() => setShowPromoCodeDialog(false)}
         setData={setPromoCodeDialogData}
-        title="Redeem promo code"
+        title=""
         confirmButton="Redeem"
         onClose={() => setShowPromoCodeDialog(false)}
         maxwidth="sm"
-        height="250px"
+        height="auto"
         borderRadius="20px"
       >
         <Stack

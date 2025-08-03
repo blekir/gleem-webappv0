@@ -88,6 +88,7 @@ const GeneratePhotos = ({ selectedBatch, setselectedBatch, productId }) => {
                 flexWrap: "wrap",
                 justifyContent: "center",
                 alignItems: "center",
+                padding: "10px 10px",
               }}
             >
               {items
@@ -107,7 +108,7 @@ const GeneratePhotos = ({ selectedBatch, setselectedBatch, productId }) => {
                         : "2px solid rgb(216, 216, 216)"
                     }
                     borderRadius="35px"
-                    width={`${220 + (index + 1) * 10}px`}
+                    width={{ xs: "100%", sm: `${220 + (index + 1) * 10}px` }}
                     height={`${46}px`}
                     padding="20px 10px"
                     gap="10px"

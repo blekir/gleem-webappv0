@@ -83,14 +83,17 @@ const Sidebar = ({
         <Drawer
           open={isSidebarOpen}
           onClose={() => setIsSidebarOpen(false)}
-          variant="persistent"
+          variant={isNonMobile ? "persistent" : "temporary"}
           anchor="left"
           sx={{
             width: drawerWidth,
 
             "& .MuiDrawer-paper": {
               color: theme.palette.secondary,
-              backgroundColor: theme.palette.background.alt,
+              backgroundColor:
+                theme.palette.mode === "dark"
+                  ? theme.palette.primary[900]
+                  : "#ffffff",
 
               boxSizing: "border-box",
               // borderWidth: isNonMobile ? 1 : "2px",
@@ -113,25 +116,29 @@ const Sidebar = ({
             <Box width="100%">
               <Box m="1.5rem 2rem 8rem 1.5rem">
                 {/* <FlexBetween color={theme.palette.secondary.main}> */}
-                <Box
-                  display="flex"
-                  flexDirection="column"
-                  alignItems="center"
-                  justifyContent="center"
-                  gap="0.5rem"
-                >
-                  <img
-                    src={logo}
-                    alt="GLEEM AI"
-                    width="auto"
-                    height="30px"
-                  ></img>
-                </Box>
-                {!isNonMobile && (
-                  <IconButton onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
-                    <ChevronLeft />
-                  </IconButton>
-                )}
+                <FlexBetween>
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    alignItems="center"
+                    justifyContent="center"
+                    gap="0.5rem"
+                  >
+                    <img
+                      src={logo}
+                      alt="GLEEM AI"
+                      width="auto"
+                      height="30px"
+                    ></img>
+                  </Box>
+                  {!isNonMobile && (
+                    <IconButton
+                      onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                    >
+                      <ChevronLeft />
+                    </IconButton>
+                  )}
+                </FlexBetween>
                 {/* </FlexBetween> */}
               </Box>
               <List>

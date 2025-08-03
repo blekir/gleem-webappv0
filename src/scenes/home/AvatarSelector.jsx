@@ -67,7 +67,8 @@ const AvatarSelector = ({ selectedLora, setselectedLora }) => {
             display="flex"
             flexDirection="row"
             justifyContent="center"
-            padding="10px 0px 12px 0px"
+            padding="10px 10px 12px 0px"
+            textAlign="center"
           >
             <Typography
               sx={{ fontWeight: "700", color: theme.palette.grey[600] }}
@@ -179,7 +180,12 @@ const AvatarSelector = ({ selectedLora, setselectedLora }) => {
             direction={{ xs: "column", sm: "row" }}
             spacing={{ xs: 0.5, sm: 2, md: 3 }}
             useFlexGap
-            sx={{ flexWrap: "wrap", justifyContent: "center" }}
+            sx={{
+              flexWrap: "wrap",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "10px",
+            }}
           >
             <Avatar
               name="quick"

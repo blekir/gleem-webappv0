@@ -34,20 +34,6 @@ function a11yProps(index) {
   };
 }
 
-const innerContainerFotnSize = {
-  xs: "0.7rem",
-  sm: "0.8rem",
-  md: "0.9rem",
-  lg: "1rem",
-  xl: "1.1rem",
-};
-const innerContainerFotnSizeSmall = {
-  xs: "0.6rem",
-  sm: "0.6rem",
-  md: "0.6rem",
-  lg: "0.7rem",
-  xl: "0.8rem",
-};
 function CustomTabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -149,122 +135,94 @@ const Paywall = (props) => {
         useFlexGap
         sx={{
           flexWrap: "wrap",
-          justifyContent: "space-around",
+          justifyContent: "center",
           alignItems: "center",
           marginTop: "0px",
         }}
       >
-        <Box display="flex" flexDirection="column" alignItems="center">
-          <motion.Box
-            initial={{ opacity: 0, y: -50 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            style={{
-              display: "flex",
-              flexDirection: { xs: "column", sm: "row" },
-              flexWrap: "wrap",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "10px",
+        <motion.Box
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          style={{
+            display: "flex",
+            flexDirection: "row",
+            alignItems: "center",
+            gap: "10px",
+          }}
+        >
+          <img src={stars} alt="stars" width="30px" />
+          <Typography sx={{ fontSize: "1.3rem", fontWeight: "700" }}>
+            Create stunning AI Avatars & Images
+          </Typography>
+        </motion.Box>
+        <motion.Box
+          initial={{ opacity: 0, y: -80 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Typography
+            sx={{
+              fontSize: "0.8rem",
+              fontWeight: "400",
+              width: "100%",
+              textAlign: "center",
+              color: theme.palette.text.secondary,
+              marginBottom: "20px",
             }}
           >
-            <img src={stars} alt="stars" width="30px" />
-            <Typography
-              sx={{
-                fontSize: {
-                  xs: "1rem",
-                  sm: "1.1rem",
-                  md: "1.2rem",
-                  lg: "1.3rem",
-                  xl: "1.3rem",
-                },
-                textAlign: "center",
-                fontWeight: "700",
-              }}
-            >
-              Create stunning AI Avatars & Images
-            </Typography>
-          </motion.Box>
-          <motion.Box
-            initial={{ opacity: 0, y: -80 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Typography
-              sx={{
-                fontSize: {
-                  xs: "0.7rem",
-                  sm: "0.7rem",
-                  md: "0.7rem",
-                  lg: "0.8rem",
-                  xl: "0.8rem",
-                },
-                fontWeight: "400",
-                width: "100%",
-                textAlign: "center",
-                color: theme.palette.text.secondary,
-                marginBottom: "20px",
-              }}
-            >
-              Transform your photos into personalized AI Avatars and generate
-              amazing images with them.
-            </Typography>
-          </motion.Box>
-          <motion.Box
-            initial={{ opacity: 0, y: -100 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            <Tabs
-              disableRipple
-              value={currentTab}
-              onChange={handleChangeTab}
-              aria-label="basic tabs example"
-              sx={{
-                minHeight: 0,
-                background: "rgba(229, 230, 234)",
+            Transform your photos into personalized AI Avatars and generate
+            amazing images with them.
+          </Typography>
+        </motion.Box>
+        <motion.Box
+          initial={{ opacity: 0, y: -100 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Tabs
+            disableRipple
+            value={currentTab}
+            onChange={handleChangeTab}
+            aria-label="basic tabs example"
+            sx={{
+              minHeight: 0,
+              background: "rgba(229, 230, 234)",
+              borderRadius: "30px",
+
+              margin: "0px 0px",
+              padding: "0px 0px",
+              boxShadow: "0 2px 8px rgba(24, 144, 255, 0.08)",
+
+              "& .MuiTab-root": {
+                color: "rgba(61, 71, 85, 0.70)",
+
                 borderRadius: "30px",
+                minHeight: 0,
+                maxHeight: 30,
+                minWidth: 80,
+                fontWeight: 700,
+                fontSize: "0.7rem",
+                margin: "5px 5px",
+                transition:
+                  "background 0.2s, color 0.2s, transform 0.3s cubic-bezier(0.4,0,0.2,1)",
 
-                margin: "0px 0px",
-                padding: "0px 0px",
-                boxShadow: "0 2px 8px rgba(24, 144, 255, 0.08)",
-
-                "& .MuiTab-root": {
-                  color: "rgba(61, 71, 85, 0.70)",
-
+                "&.Mui-selected": {
+                  color: "rgba(61, 71, 85, 0.9)",
+                  background: "rgba(255, 255, 255, 0.80)",
                   borderRadius: "30px",
-                  minHeight: 0,
-                  maxHeight: 30,
-                  minWidth: 60,
-                  fontWeight: 700,
-                  fontSize: {
-                    xs: "0.6rem",
-                    sm: "0.6rem",
-                    md: "0.6rem",
-                    lg: "0.7rem",
-                    xl: "0.7rem",
-                  },
-                  margin: "5px 5px",
-                  transition:
-                    "background 0.2s, color 0.2s, transform 0.3s cubic-bezier(0.4,0,0.2,1)",
-
-                  "&.Mui-selected": {
-                    color: "rgba(61, 71, 85, 0.9)",
-                    background: "rgba(255, 255, 255, 0.80)",
-                    borderRadius: "30px",
-                    boxShadow: "0px 1px 1px 0px rgba(0, 0, 0, 0.15)",
-                    transform: "translateX(0)",
-                    zIndex: 1,
-                  },
+                  boxShadow: "0px 1px 1px 0px rgba(0, 0, 0, 0.15)",
+                  transform: "translateX(0)",
+                  zIndex: 1,
                 },
-              }}
-              TabIndicatorProps={{ style: { display: "none" } }}
-            >
-              <Tab disableRipple label="SUBSCRIPTION" {...a11yProps(0)} />
-              <Tab disableRipple label="CREDITS" {...a11yProps(1)} />
-            </Tabs>
-          </motion.Box>
-        </Box>
+              },
+            }}
+            TabIndicatorProps={{ style: { display: "none" } }}
+          >
+            <Tab disableRipple label="SUBSCRIPTION" {...a11yProps(0)} />
+            <Tab disableRipple label="CREDITS" {...a11yProps(1)} />
+          </Tabs>
+        </motion.Box>
         {/* SUBSCRIPTION */}
         <CustomTabPanel value={currentTab} index={0}>
           <Stack
@@ -305,10 +263,17 @@ const Paywall = (props) => {
                       position="relative"
                       sx={{
                         padding: "20px 0px",
+                        width: {
+                          xs: "100%", // Mobile: full width
+                          sm: "120px", // Small screens: 280px
+                          md: "160px", // Medium screens: 260px
+                          lg: "180px", // Large screens: 240px
+                          xl: "230px", // Extra large screens: 230px
+                        },
                         maxWidth: "230px",
                         height: "auto",
                       }}
-                      gap={innerContainerFotnSizeSmall}
+                      gap="5px"
                     >
                       {product.recurring.interval === "month" && (
                         <Box
@@ -316,7 +281,7 @@ const Paywall = (props) => {
                             position: "absolute",
                             top: "-10px",
                             right: "-10px",
-
+                            width: "72px",
                             height: "22px",
                             backgroundColor: "#CA0B4A",
                             borderRadius: "5px",
@@ -324,20 +289,7 @@ const Paywall = (props) => {
                             justifyContent: "center",
                             alignItems: "center",
                             color: "white",
-                            padding: {
-                              xs: "0px 5px",
-                              sm: "0px 5px",
-                              md: "0px 5px",
-                              lg: "0px 10px",
-                              xl: "0px 10px",
-                            },
-                            fontSize: {
-                              xs: "0.7rem",
-                              sm: "0.7rem",
-                              md: "0.7rem",
-                              lg: "0.8rem",
-                              xl: "0.8rem",
-                            },
+                            fontSize: "0.8rem",
                             fontWeight: "700",
                           }}
                         >
@@ -358,7 +310,7 @@ const Paywall = (props) => {
                       >
                         <Typography
                           sx={{
-                            fontSize: innerContainerFotnSize,
+                            fontSize: "1.1em",
                             fontWeight: "700",
                           }}
                         >{`${
@@ -379,7 +331,7 @@ const Paywall = (props) => {
                               <Typography
                                 sx={{
                                   position: "relative",
-                                  fontSize: innerContainerFotnSize,
+                                  fontSize: "1.1em",
                                   fontWeight: "400",
                                   color: "rgba(0, 0, 0, 0.70)",
                                 }}
@@ -390,13 +342,7 @@ const Paywall = (props) => {
                                 sx={{
                                   position: "absolute",
 
-                                  width: {
-                                    xs: "40px",
-                                    sm: "45px",
-                                    md: "50px",
-                                    lg: "55px",
-                                    xl: "60px",
-                                  },
+                                  width: "58px",
                                   height: "1.5px",
                                   transform: "rotate(-14.364deg)",
                                   backgroundColor: "#E20909",
@@ -408,7 +354,7 @@ const Paywall = (props) => {
 
                           <Typography
                             sx={{
-                              fontSize: innerContainerFotnSize,
+                              fontSize: "1.1em",
                               fontWeight: "700",
                               background:
                                 "linear-gradient(89deg, #0427C5 -0.31%, rgba(191, 5, 207, 0.90) 95.16%)",
@@ -425,16 +371,7 @@ const Paywall = (props) => {
                           }`}</Typography>
                         </Box>
                         <Divider
-                          sx={{
-                            width: "100%",
-                            margin: {
-                              xs: "5px 0px 5px 0px",
-                              sm: "5px 0px 10px 0px",
-                              md: "5px 0px 15px 0px",
-                              lg: "5px 0px 20px 0px",
-                              xl: "5px 0px 20px 0px",
-                            },
-                          }}
+                          sx={{ width: "100%", margin: "5px 0px 20px 0px" }}
                         />
                         <Box
                           key={index}
@@ -442,19 +379,17 @@ const Paywall = (props) => {
                           flexDirection="row"
                           justifyContent="flex-start"
                           alignItems="flex-start"
-                          sx={{ width: "auto" }}
-                          gap={innerContainerFotnSizeSmall}
+                          sx={{ width: "180px" }}
+                          gap="15px"
                         >
                           {/* <Check
                                 fontSize="small"
                                 sx={{ color: theme.palette.yellows[700] }}
                               /> */}
-                          <CheckMark
-                            sx={{ fontSize: innerContainerFotnSizeSmall }}
-                          />
+                          <CheckMark />
                           <Typography
                             sx={{
-                              fontSize: innerContainerFotnSizeSmall,
+                              fontSize: "0.8rem",
                               color: "rgb(0, 0, 0)",
                             }}
                           >
@@ -463,21 +398,9 @@ const Paywall = (props) => {
                         </Box>
                         <Typography
                           sx={{
-                            fontSize: {
-                              xs: "0.6rem",
-                              sm: "0.6rem",
-                              md: "0.6rem",
-                              lg: "0.7rem",
-                              xl: "0.7rem",
-                            },
+                            fontSize: "0.7rem",
                             color: "rgba(0, 0, 0, 0.50)",
-                            marginLeft: {
-                              xs: "1.8rem",
-                              sm: "1.8rem",
-                              md: "1.8rem",
-                              lg: "1.9rem",
-                              xl: "2rem",
-                            },
+                            marginLeft: "35px",
                             marginTop: "-5px",
                           }}
                         >
@@ -491,8 +414,8 @@ const Paywall = (props) => {
                               flexDirection="row"
                               justifyContent="flex-start"
                               alignItems="flex-start"
-                              sx={{ width: "auto" }}
-                              gap={innerContainerFotnSizeSmall}
+                              sx={{ width: "180px" }}
+                              gap="15px"
                             >
                               {/* <Check
                                 fontSize="small"
@@ -501,7 +424,7 @@ const Paywall = (props) => {
                               <CheckMark />
                               <Typography
                                 sx={{
-                                  fontSize: innerContainerFotnSizeSmall,
+                                  fontSize: "0.8rem",
                                   color: "rgb(0, 0, 0)",
                                 }}
                               >
@@ -515,14 +438,13 @@ const Paywall = (props) => {
                         variant="contained"
                         sx={{
                           alignSelf: "center",
-                          width: "auto",
-
+                          width: "80%",
                           borderRadius: "6px",
                           fontWeight: "700",
-                          fontSize: innerContainerFotnSizeSmall,
+                          fontSize: "0.8rem",
                           fontFamily: "Inter",
                           lineHeight: "18px",
-                          padding: "9px 30px",
+                          padding: "9px 10px",
                           marginTop: "20px",
                           background:
                             "linear-gradient(89deg, rgba(4, 39, 197, 0.80) -0.31%, rgba(191, 5, 207, 0.72) 95.16%)",
@@ -591,22 +513,10 @@ const Paywall = (props) => {
                 position="relative"
                 sx={{
                   padding: "20px 0px",
-                  width: {
-                    xs: "200px",
-                    sm: "210px",
-                    md: "220px",
-                    lg: "230px",
-                    xl: "230px",
-                  },
-                  height: {
-                    xs: "300px",
-                    sm: "310px",
-                    md: "320px",
-                    lg: "330px",
-                    xl: "330px",
-                  },
+                  width: "230px",
+                  height: "330px",
                 }}
-                gap={innerContainerFotnSizeSmall}
+                gap="5px"
               >
                 {credits.length > 0 &&
                   credits[creditsSelectedValue - 1].credits === 90 && (
@@ -623,20 +533,7 @@ const Paywall = (props) => {
                         justifyContent: "center",
                         alignItems: "center",
                         color: "white",
-                        padding: {
-                          xs: "0px 5px",
-                          sm: "0px 5px",
-                          md: "0px 5px",
-                          lg: "0px 10px",
-                          xl: "0px 10px",
-                        },
-                        fontSize: {
-                          xs: "0.7rem",
-                          sm: "0.7rem",
-                          md: "0.7rem",
-                          lg: "0.8rem",
-                          xl: "0.8rem",
-                        },
+                        fontSize: "0.8rem",
                         fontWeight: "700",
                         boxShadow: "0px 1px 1px 0px rgba(0, 0, 0, 0.15)",
                       }}
@@ -648,10 +545,11 @@ const Paywall = (props) => {
                   display="flex"
                   flexDirection="column"
                   justifyContent="center"
-                  alignItems="space-between"
+                  alignItems="flex-start"
                   sx={{
                     padding: "0px 20px",
                     width: "100%",
+                    height: "auto",
                   }}
                   gap="5px"
                 >
@@ -660,9 +558,6 @@ const Paywall = (props) => {
                       display: "flex",
                       flexDirection: "row",
                       alignItems: "center",
-                      justifyContent: "center",
-                      alignSelf: "center",
-                      marginLeft: "5px",
                       gap: "5px",
                     }}
                   >
@@ -695,7 +590,6 @@ const Paywall = (props) => {
 
                     {credits.length > 0 && (
                       <Box
-                        width="100%"
                         display="flex"
                         flexDirection="row"
                         alignItems="center"
@@ -704,20 +598,8 @@ const Paywall = (props) => {
                         gap="4px"
                       >
                         <Box
-                          width={{
-                            xs: "3px",
-                            sm: "4px",
-                            md: "5px",
-                            lg: "6px",
-                            xl: "6px",
-                          }}
-                          height={{
-                            xs: "3px",
-                            sm: "4px",
-                            md: "5px",
-                            lg: "6px",
-                            xl: "6px",
-                          }}
+                          width="6px"
+                          height="6px"
                           borderRadius="30% 0% 0% 30%"
                           backgroundColor="rgba(191, 5, 207, 0.60)"
                           sx={{
@@ -729,13 +611,7 @@ const Paywall = (props) => {
                         />
                         <Slider
                           sx={{
-                            width: {
-                              xs: "150px",
-                              sm: "160px",
-                              md: "170px",
-                              lg: "180px",
-                              xl: "190px",
-                            },
+                            width: "190px",
                             margin: "0px 0px",
 
                             marginTop: "30px",
@@ -743,13 +619,7 @@ const Paywall = (props) => {
                             // Style the track and rail for better effect
 
                             "& .MuiSlider-rail": {
-                              height: {
-                                xs: "3px",
-                                sm: "4px",
-                                md: "5px",
-                                lg: "6px",
-                                xl: "6px",
-                              },
+                              height: "6px",
                               opacity: 1,
                               background:
                                 "linear-gradient(90deg, rgba(191, 5, 207, 0.60) 0%, #007AFF 100%)",
@@ -759,13 +629,7 @@ const Paywall = (props) => {
                               borderRadius: "30px",
                               background: "#1485FF",
                               boxShadow: "0px 1px 2px 0px rgba(0, 0, 0, 0.30)",
-                              width: {
-                                xs: "8.95px",
-                                sm: "9.95px",
-                                md: "10.95px",
-                                lg: "10.95px",
-                                xl: "10.95px",
-                              },
+                              width: "10.95px",
                               height: "26px",
                               flexShrink: 0,
                               "&:hover": {},
@@ -776,13 +640,7 @@ const Paywall = (props) => {
                               height: "8px",
                             },
                             " & .MuiSlider-markLabel": {
-                              fontSize: {
-                                xs: "0.7rem",
-                                sm: "0.73rem",
-                                md: "0.76rem",
-                                lg: "0.8rem",
-                                xl: "0.8rem",
-                              },
+                              fontSize: "0.8rem",
                               marginTop: "-50px",
                             },
                             "& .MuiSlider-markLabelActive": {
@@ -801,20 +659,8 @@ const Paywall = (props) => {
                           track={false}
                         />
                         <Box
-                          width={{
-                            xs: "3px",
-                            sm: "4px",
-                            md: "5px",
-                            lg: "6px",
-                            xl: "6px",
-                          }}
-                          height={{
-                            xs: "3px",
-                            sm: "4px",
-                            md: "5px",
-                            lg: "6px",
-                            xl: "6px",
-                          }}
+                          width="6px"
+                          height="6px"
                           borderRadius="0% 30% 30% 0%"
                           backgroundColor="#007AFF"
                           sx={{
@@ -846,20 +692,14 @@ const Paywall = (props) => {
                       to={credits[creditsSelectedValue - 1].credits}
                       duration={0.02}
                       style={{
-                        fontSize: "1.3rem",
+                        fontSize: "1.2rem",
                         color: "rgba(0, 0, 0)",
                         fontWeight: "700",
                       }}
                     />
                     <Typography
                       sx={{
-                        fontSize: {
-                          xs: "1.1rem",
-                          sm: "1.2rem",
-                          md: "1.3rem",
-                          lg: "1.3rem",
-                          xl: "1.3rem",
-                        },
+                        fontSize: "1.2rem",
                         color: "rgba(0, 0, 0)",
                         fontWeight: "700",
                       }}
@@ -870,7 +710,7 @@ const Paywall = (props) => {
 
                   <Typography
                     sx={{
-                      fontSize: innerContainerFotnSize,
+                      fontSize: "1.1rem",
                       fontWeight: "700",
                       background:
                         "linear-gradient(89deg, #0427C5 -0.31%, rgba(191, 5, 207, 0.90) 95.16%)",
@@ -888,9 +728,7 @@ const Paywall = (props) => {
                     gap="5px"
                   >
                     <CheckMark />
-                    <Typography sx={{ fontSize: innerContainerFotnSizeSmall }}>
-                      Watermark removed
-                    </Typography>
+                    <Typography>Watermark removed</Typography>
                   </Box>
                   <Box
                     display="flex"
@@ -899,29 +737,20 @@ const Paywall = (props) => {
                     gap="5px"
                   >
                     <CheckMark />
-                    <Typography sx={{ fontSize: innerContainerFotnSizeSmall }}>
-                      Commercial use
-                    </Typography>
+                    <Typography>Commercial use</Typography>
                   </Box>
                 </Box>
                 <Button
                   variant="contained"
                   sx={{
                     alignSelf: "center",
-                    width: "auto",
-
+                    width: "80%",
                     borderRadius: "6px",
                     fontWeight: "700",
-                    fontSize: innerContainerFotnSizeSmall,
+                    fontSize: "0.8rem",
                     fontFamily: "Inter",
                     lineHeight: "18px",
-                    padding: {
-                      xs: "9px 10px",
-                      sm: "9px 12px",
-                      md: "9px 15px",
-                      lg: "9px 18px",
-                      xl: "9px 20px",
-                    },
+                    padding: "9px 10px",
                     background:
                       "linear-gradient(89deg, rgba(4, 39, 197, 0.80) -0.31%, rgba(191, 5, 207, 0.72) 95.16%)",
 
@@ -1023,27 +852,14 @@ const Footer = () => {
         >
           <circle cx="5.5" cy="5" r="5" fill="#2FBD81" />
         </svg>
-        <Typography
-          sx={{
-            fontSize: {
-              xs: "0.7rem",
-              sm: "0.7rem",
-              md: "0.7rem",
-              lg: "0.8rem",
-              xl: "0.8rem",
-            },
-          }}
-        >
-          Join thousands creating AI content
-        </Typography>
+        <Typography>Join thousands creating AI content</Typography>
       </Box>
       <Box
         sx={{
           display: "flex",
-          flexDirection: { xs: "column", sm: "row" },
-          flexWrap: "wrap",
+          flexDirection: "row",
           alignItems: "center",
-          gap: { xs: "10px", sm: "30px" },
+          gap: "30px",
         }}
       >
         <Box
@@ -1063,19 +879,7 @@ const Footer = () => {
           >
             <circle cx="5.5" cy="5" r="5" fill="#2FBD81" />
           </svg>
-          <Typography
-            sx={{
-              fontSize: {
-                xs: "0.7rem",
-                sm: "0.7rem",
-                md: "0.7rem",
-                lg: "0.8rem",
-                xl: "0.8rem",
-              },
-            }}
-          >
-            Professional Quality
-          </Typography>
+          <Typography>Professional Quality</Typography>
         </Box>
         <Box
           sx={{
@@ -1094,19 +898,7 @@ const Footer = () => {
           >
             <circle cx="5.5" cy="5" r="5" fill="#2FBD81" />
           </svg>
-          <Typography
-            sx={{
-              fontSize: {
-                xs: "0.7rem",
-                sm: "0.7rem",
-                md: "0.7rem",
-                lg: "0.8rem",
-                xl: "0.8rem",
-              },
-            }}
-          >
-            Secure & Private
-          </Typography>
+          <Typography>Secure & Private</Typography>
         </Box>
         <Box
           sx={{
@@ -1125,19 +917,7 @@ const Footer = () => {
           >
             <circle cx="5.5" cy="5" r="5" fill="#2FBD81" />
           </svg>
-          <Typography
-            sx={{
-              fontSize: {
-                xs: "0.7rem",
-                sm: "0.7rem",
-                md: "0.7rem",
-                lg: "0.8rem",
-                xl: "0.8rem",
-              },
-            }}
-          >
-            Fast & Easy
-          </Typography>
+          <Typography>Fast & Easy</Typography>
         </Box>
       </Box>
     </motion.Box>

@@ -48,10 +48,11 @@ const Home = () => {
   return (
     <>
       <Box
+        className="home-container"
         sx={{
           display: "flex",
           flexDirection: "column",
-          width: "auto",
+          width: "100%",
           gap: "20px",
           height: "1000px",
           alignItems: "center",

@@ -87,7 +87,7 @@ export default function SmallDialog({
             </IconButton>
           </Stack>
         </DialogTitle>
-        <DialogContent sx={{ height: "90vh" }}>
+        <DialogContent sx={{ height: "100%" }}>
           <DialogContentText>{content}</DialogContentText>
           {children}
         </DialogContent>

@@ -102,7 +102,12 @@ const AvatarCreator = ({ type, images, setImages, maxFiles }) => {
           >
             <Typography
               fontSize={{ xs: "0.8em", sm: "1em" }}
-              sx={{ wordBreak: "break-word", marginTop: "20px" }}
+              sx={{
+                wordBreak: "break-word",
+                marginTop: "20px",
+                textAlign: "center",
+                padding: "10px 10px",
+              }}
             >
               Upload {maxFiles} {maxFiles === 1 ? "photo" : "photos"} to help us
               train AI and create your personalized AI Avatar{" "}
@@ -115,9 +120,9 @@ const AvatarCreator = ({ type, images, setImages, maxFiles }) => {
               sx={{
                 flexWrap: "wrap",
                 padding: "0px 10px 0px 10px",
-                justifyContent: "flex-start",
+                justifyContent: "center",
                 alignItems: "center",
-                marginTop: "30px",
+                marginTop: { xs: "10px", sm: "30px" },
               }}
             >
               {images.map((file, idx) => (

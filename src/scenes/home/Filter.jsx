@@ -15,6 +15,28 @@ import human from "../../assets/icons/human.svg";
 import dog from "../../assets/icons/dog.svg";
 import cat from "../../assets/icons/cat.svg";
 
+const padding = {
+  xs: "0px 5px",
+  sm: "0px 5px",
+  md: "0px 10px",
+  lg: "0px 15px",
+  xl: "0px 20px",
+};
+const iconSize = {
+  xs: "14px",
+  sm: "14px",
+  md: "16px",
+  lg: "18px",
+  xl: "18px",
+};
+
+const containerWidth = {
+  xs: "255px",
+  sm: "255px",
+  md: "303px",
+  lg: "auto",
+  xl: "auto",
+};
 const Filter = ({
   species,
   gender,
@@ -30,13 +52,12 @@ const Filter = ({
     <Box
       display="inline-flex"
       height="44px"
-      maxWidth="50%"
+      width={containerWidth}
       alignItems="center"
       justifyContent="center"
       alignSelf="center"
       bgcolor="rgba(255, 255, 255, 0.3)"
       borderRadius="34px"
-      overflow="hidden"
       border="1px solid rgba(255, 255, 255, 0.5)"
     >
       <ToggleButtonGroup
@@ -49,12 +70,18 @@ const Filter = ({
           "& .MuiToggleButton-root": {
             border: "none",
             borderRadius: "38px",
-            padding: "0 20px",
+            padding: padding,
             height: "34px",
             color: "rgba(61, 71, 85, 0.8)",
             fontFamily: "Manrope, Helvetica",
             fontWeight: 500,
-            fontSize: "16px",
+            fontSize: {
+              xs: "10px",
+              sm: "10px",
+              md: "12px",
+              lg: "14px",
+              xl: "16px",
+            },
             letterSpacing: "-0.32px",
             textTransform: "none",
             "&.Mui-selected": {
@@ -69,21 +96,45 @@ const Filter = ({
         <ToggleButton value="human" aria-label="person" disableRipple>
           <Stack direction="row" spacing={1} alignItems="center">
             <Box component="span">person</Box>
-            <img src={human} alt="human" />
+            <Box
+              src={human}
+              component="img"
+              alt="human"
+              sx={{
+                width: iconSize,
+                height: "auto",
+              }}
+            />
           </Stack>
         </ToggleButton>
 
         <ToggleButton value="dog" aria-label="dog" disableRipple>
           <Stack direction="row" spacing={1} alignItems="center">
             <Box component="span">dog</Box>
-            <img src={dog} alt="dog" />
+            <Box
+              src={dog}
+              component="img"
+              alt="dog"
+              sx={{
+                width: iconSize,
+                height: "auto",
+              }}
+            />
           </Stack>
         </ToggleButton>
 
         <ToggleButton value="cat" aria-label="cat" disableRipple>
           <Stack direction="row" spacing={1} alignItems="center">
             <Box component="span">cat</Box>
-            <img src={cat} alt="cat" />
+            <Box
+              src={cat}
+              component="img"
+              alt="cat"
+              sx={{
+                width: iconSize,
+                height: "auto",
+              }}
+            />
           </Stack>
         </ToggleButton>
       </ToggleButtonGroup>
@@ -146,10 +197,10 @@ const Filter = ({
           }}
         >
           <ToggleButton value="male" aria-label="left aligned" disableRipple>
-            <ManIcon />
+            <ManIcon sx={{ width: iconSize, height: "auto" }} />
           </ToggleButton>
           <ToggleButton value="female" aria-label="centered" disableRipple>
-            <WomanIcon />
+            <WomanIcon sx={{ width: iconSize, height: "auto" }} />
           </ToggleButton>
         </ToggleButtonGroup>
       </Stack>

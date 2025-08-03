@@ -135,7 +135,20 @@ const AnimatedList = ({
             {!category.includes("_") && (
               <Typography
                 sx={{
-                  alignSelf: "flex-start",
+                  alignSelf: {
+                    xs: "center",
+                    sm: "center",
+                    md: "center",
+                    lg: "flex-start",
+                    xl: "flex-start",
+                  },
+                  justifySelf: {
+                    xs: "center",
+                    sm: "center",
+                    md: "center",
+                    lg: "flex-start",
+                    xl: "flex-start",
+                  },
                   color: theme.palette.primary[300],
                   fontFamily: "Space Grotesk",
                   fontSize: "18px",
@@ -143,6 +156,7 @@ const AnimatedList = ({
                   fontWeight: 700,
                   lineHeight: "normal",
                   letterSpacing: "-0.18px",
+                  marginBottom: "15px",
                 }}
               >
                 {category}
@@ -154,7 +168,13 @@ const AnimatedList = ({
               useFlexGap
               sx={{
                 flexWrap: "wrap",
-                justifyContent: "flex-start",
+                justifyContent: {
+                  xs: "center",
+                  sm: "center",
+                  md: "center",
+                  lg: "flex-start",
+                  xl: "flex-start",
+                },
                 alignItems: "center",
                 marginBottom: "28px",
                 width: "100%",

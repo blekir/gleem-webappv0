@@ -5,12 +5,15 @@ import {
   Box,
   CircularProgress,
   IconButton,
+  ImageList,
+  ImageListItem,
   LinearProgress,
   Paper,
   Skeleton,
   Stack,
   Typography,
   useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import {
   useGetOrdersQuery,
@@ -27,11 +30,17 @@ import ConfirmActionDialog from "components/ConfirmActionDialog";
 import { enqueueSnackbar } from "notistack";
 import JSZip from "jszip";
 import useZipDownload from "hooks/useZipDownload";
+import useContainerWidth from "hooks/useContainerWidth";
 
 const Orders = () => {
   const { data, error, isLoading, refetch } = useGetOrdersQuery({
     refetchOnMountOrArgChange: true,
   });
+
+  const [ref, width] = useContainerWidth();
+  // Example: 1 column per 300px of width
+  const columns = Math.max(1, Math.floor(width / 320));
+
   const theme = useTheme();
   const { orderId } = useParams();
   const navigate = useNavigate();
@@ -155,7 +164,6 @@ const Orders = () => {
     }
   };
 
-  // const handleZipDownload = async (images, product) => {
   //   const zip = new JSZip();
 
   //   try {
@@ -194,7 +202,15 @@ const Orders = () => {
   // };
 
   return (
-    <>
+    <Box
+      ref={ref}
+      sx={{
+        width: "100%",
+        minWidth: 0,
+        maxWidth: "100vw",
+        boxSizing: "border-box",
+      }}
+    >
       <ConfirmActionDialog
         title={confirmDialogProp.title}
         content={confirmDialogProp.content}
@@ -212,6 +228,14 @@ const Orders = () => {
           alignItems: "center",
         }}
       >
+        {/* <ImageList
+        variant="masonry"
+        cols={columns}
+        gap={8}
+        sx={{
+          padding: "30px",
+        }}
+      > */}
         {orders.map((ord, index) => {
           const progress = orderProgressMap[ord.uuid] ?? {
               overall_progress: ord.progress,
@@ -224,81 +248,97 @@ const Orders = () => {
             };
           return (
             <>
-              <Box
+              <ImageListItem
                 key={index}
                 sx={{
-                  transition: "transform 0.2s",
-                  position: "relative",
-
-                  "&:hover": {
-                    transform: "scale(1.03)",
-                    cursor:
-                      progress.overall_progress !== 100 ? "wait" : "pointer",
-                  },
-                }}
-                onClick={() => handleOpenDialog(ord, progress.overall_progress)}
-                onMouseEnter={() => {
-                  setHoveredIndex(index);
-                }}
-                onMouseLeave={() => {
-                  setHoveredIndex(null);
+                  width: "auto",
+                  height: "auto",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: "0px",
                 }}
               >
-                <Box sx={{ position: "relative" }}>
-                  <OrderTile
-                    img={ord.thumb}
-                    status={ord.status}
-                    orderProgress={progress}
-                    refetch={refetch}
-                  />
-                  {progress.overall_progress === 100 &&
-                    hoveredIndex === index && (
-                      <Paper
-                        elevation={10}
-                        sx={{
-                          display: "flex",
-                          justifyContent: "center",
-                          flexDirection: "column",
-                          marginTop: "20px",
-                          marginBottom: "0px",
-                          position: "absolute",
-                          bottom: 0,
-                          left: "50%",
-                          transform: "translateX(-50%)",
-                          backgroundColor: "rgba(35, 106, 240, 0.7)",
-                          padding: "10px",
-                          borderRadius: "0px 0px 15px 15px",
-                          width: "100%",
-                          height: "55px",
-                          backdropFilter: "blur(2px)",
-                          boxShadow: "0px 0px 30px 0px rgba(0, 0, 0, 0.5)",
-                        }}
-                      >
-                        <ImageDialogButtons
-                          onUpscale={(e) => {
-                            e.stopPropagation();
+                <Box
+                  key={index}
+                  sx={{
+                    transition: "transform 0.2s",
+                    position: "relative",
+
+                    "&:hover": {
+                      transform: "scale(1.03)",
+                      cursor:
+                        progress.overall_progress !== 100 ? "wait" : "pointer",
+                    },
+                  }}
+                  onClick={() =>
+                    handleOpenDialog(ord, progress.overall_progress)
+                  }
+                  onMouseEnter={() => {
+                    setHoveredIndex(index);
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredIndex(null);
+                  }}
+                >
+                  <Box sx={{ position: "relative" }}>
+                    <OrderTile
+                      img={ord.thumb}
+                      status={ord.status}
+                      orderProgress={progress}
+                      refetch={refetch}
+                    />
+                    {progress.overall_progress === 100 &&
+                      hoveredIndex === index && (
+                        <Paper
+                          elevation={10}
+                          sx={{
+                            display: "flex",
+                            justifyContent: "center",
+                            flexDirection: "column",
+                            marginTop: "20px",
+                            marginBottom: "0px",
+                            position: "absolute",
+                            bottom: 0,
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            backgroundColor: "rgba(35, 106, 240, 0.7)",
+                            padding: "10px",
+                            borderRadius: "0px 0px 15px 15px",
+                            width: "100%",
+                            height: "55px",
+                            backdropFilter: "blur(2px)",
+                            boxShadow: "0px 0px 30px 0px rgba(0, 0, 0, 0.5)",
                           }}
-                          onShare={(e) => {
-                            e.stopPropagation();
-                          }}
-                          onDownload={(e) => {
-                            console.log("downloading order", ord.uuid);
-                            handleDownloadOrder(e, ord.uuid);
-                          }}
-                          onDelete={(e) => {
-                            handleDeleteOrder(e, ord.uuid);
-                          }}
-                          size="small"
-                          color="white"
-                        />
-                      </Paper>
-                    )}
+                        >
+                          <ImageDialogButtons
+                            onUpscale={(e) => {
+                              e.stopPropagation();
+                            }}
+                            onShare={(e) => {
+                              e.stopPropagation();
+                            }}
+                            onDownload={(e) => {
+                              console.log("downloading order", ord.uuid);
+                              handleDownloadOrder(e, ord.uuid);
+                            }}
+                            onDelete={(e) => {
+                              handleDeleteOrder(e, ord.uuid);
+                            }}
+                            size="small"
+                            color="white"
+                          />
+                        </Paper>
+                      )}
+                  </Box>
                 </Box>
-              </Box>
+              </ImageListItem>
             </>
           );
         })}
       </Stack>
+      {/* </ImageList> */}
+
       {order !== -1 && (
         <OrderDetails
           isOpen={orderDetailsOpen}
@@ -307,7 +347,7 @@ const Orders = () => {
           order={order}
         />
       )}
-    </>
+    </Box>
   );
 };
 

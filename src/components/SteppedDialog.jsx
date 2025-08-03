@@ -151,24 +151,34 @@ export default function SteppedDialog({
           <Stepper
             activeStep={activeStep}
             sx={{
-              "& .MuiStepIcon-root": { color: "gray" }, // Default
+              "& .MuiStepIcon-root": {
+                color: "gray",
+                fontSize: { xs: "14px", sm: "18px" },
+              }, // Default
               "& .MuiStepIcon-root.Mui-active": { color: "blue" }, // Active
               "& .MuiStepIcon-root.Mui-completed": { color: "green" }, // Completed
             }}
           >
             {steps.map((label, index) => {
               const stepProps = {};
-              const labelProps = {};
 
               return (
                 <Step key={label} {...stepProps}>
-                  <StepLabel {...labelProps}>{label}</StepLabel>
+                  <StepLabel
+                    sx={{
+                      "& .MuiStepLabel-label": {
+                        fontSize: { xs: "11px", sm: "18px" },
+                      },
+                    }}
+                  >
+                    {label}
+                  </StepLabel>
                 </Step>
               );
             })}
           </Stepper>
         </Stack>
-        <DialogContent>
+        <DialogContent sx={{ margin: "20px 20px" }}>
           <DialogContentText>{content}</DialogContentText>
           {children}
         </DialogContent>
@@ -191,7 +201,7 @@ export default function SteppedDialog({
                     ? "#0427C5"
                     : "rgba(0, 0, 0, 0.80)",
                 borderRadius: "40px",
-                width: "20%",
+                width: "auto",
                 height: "40px",
                 fontSize: "16px",
                 fontWeight: 600,

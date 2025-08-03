@@ -107,7 +107,16 @@ const Products = () => {
         gap="10px"
         justifyContent="center"
         alignItems="center"
-        width="60vw"
+        sx={{
+          width: {
+            xs: "95%", // Mobile: 95% width
+            sm: "90%", // Small screens: 90% width
+            md: "85%", // Medium screens: 85% width
+            lg: "80%", // Large screens: 80% width
+            xl: "95%", // Extra large screens: 75% width
+          },
+          maxWidth: "1800px", // Optional: prevent it from getting too wide
+        }}
       >
         <Filter
           species={species}
