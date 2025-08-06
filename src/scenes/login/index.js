@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setCredentials, logout } from "state/auth";
 import { useLoginMutation, useGoogleLoginMutation } from "api/apiSlice";
 
@@ -34,6 +34,16 @@ const Login = () => {
   const [login, { isLoading }] = useLoginMutation();
   const [googleLogin, { isLoading: isGoogleLoading }] =
     useGoogleLoginMutation();
+
+  const isAuthenticated = useSelector(
+    (state) => state.authentication.user.authenticated
+  );
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/create");
+    }
+  }, [isAuthenticated]);
 
   useEffect(() => {
     emailRef.current.focus();

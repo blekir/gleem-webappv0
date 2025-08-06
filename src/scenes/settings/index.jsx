@@ -118,6 +118,15 @@ const Settings = () => {
             </Typography>
             <Stack direction="column" spacing={1.5}>
               <SettingsButton
+                label="Manage subscription"
+                onClick={() => {
+                  window.open(
+                    "https://billing.stripe.com/p/login/test_cNi14o4t25Rrfr6cE0cwg00",
+                    "_blank"
+                  );
+                }}
+              />
+              <SettingsButton
                 label="Contact support"
                 onClick={() => {
                   window.open("mailto:support@gleem.ai", "_blank");

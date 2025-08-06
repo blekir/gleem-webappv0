@@ -29,7 +29,7 @@ const CheckoutForm = () => {
 
   const fetchClientSecret = useCallback(() => {
     const data = {
-      email: "test+location_PL@example.com",
+      email: email,
       type,
       product,
       origin,

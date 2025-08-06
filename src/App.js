@@ -41,9 +41,9 @@ function App() {
     theme: "stripe",
   };
 
-  useEffect(() => {
-    fetchUserData();
-  }, []);
+  // useEffect(() => {
+  //   fetchUserData();
+  // }, []);
 
   return (
     <div className="app">

@@ -22,10 +22,11 @@ import { useGetStripeProductsQuery } from "api/apiSlice";
 
 import React, { useEffect, useState } from "react";
 import { motion } from "motion/react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import stars from "../../assets/icons/stars.svg";
 import forward from "../../assets/icons/forward.svg";
 import CountUp from "components/CountUp";
+import { useSelector } from "react-redux";
 
 function a11yProps(index) {
   return {
@@ -68,6 +69,10 @@ const Paywall = (props) => {
   const navigate = useNavigate();
   const theme = useTheme();
   const { data, error, isLoading } = useGetStripeProductsQuery();
+
+  const isSubscribed = useSelector(
+    (state) => state.authentication.user.subscribed
+  );
 
   const [currentTab, setcurrentTab] = useState(0);
   const [credits, setcredits] = useState([]);
@@ -277,214 +282,217 @@ const Paywall = (props) => {
               marginTop: "-20px",
             }}
           >
-            {[...data.data]
-              .sort((a, b) => a.unit_amount - b.unit_amount)
-              .filter((product) => product.recurring !== null && product.active)
-              .map((product, index) => {
-                return (
-                  <motion.Paper
-                    key={index}
-                    elevation={5}
-                    initial={{ opacity: 0, x: index % 2 === 0 ? -100 : 100 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.5, delay: 0 }}
-                    style={{
-                      backgroundColor:
-                        product.recurring.interval === "month"
-                          ? "rgba(255, 255, 255, 0.80)"
-                          : "rgba(255, 255, 255, 0.40)",
-                      borderRadius: "16px",
-                      boxShadow: "0px 1px 1px 0px rgba(0, 0, 0, 0.15)",
-                    }}
-                  >
-                    <Box
-                      display="flex"
-                      flexDirection="column"
-                      justifyContent="space-between"
-                      alignItems="flex-start"
-                      position="relative"
-                      sx={{
-                        padding: "20px 0px",
-                        maxWidth: "230px",
-                        height: "auto",
+            {isSubscribed ? (
+              <motion.Box
+                initial={{ opacity: 0, y: -100 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  height: "40vh",
+                  width: "30vw",
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: "1.5rem",
+                    fontWeight: "bold",
+                    color: theme.palette.yellows[700],
+                  }}
+                >
+                  You are already subscribed!
+                </Typography>
+                <Typography
+                  sx={{
+                    fontSize: "1rem",
+                    fontWeight: "bold",
+                  }}
+                >
+                  You can manage your subscription{" "}
+                  <span>
+                    <a
+                      href="https://billing.stripe.com/p/login/test_cNi14o4t25Rrfr6cE0cwg00"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        color: theme.palette.yellows[700],
+                        textDecoration: "none",
                       }}
-                      gap={innerContainerFotnSizeSmall}
                     >
-                      {product.recurring.interval === "month" && (
-                        <Box
-                          sx={{
-                            position: "absolute",
-                            top: "-10px",
-                            right: "-10px",
-
-                            height: "22px",
-                            backgroundColor: "#CA0B4A",
-                            borderRadius: "5px",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            color: "white",
-                            padding: {
-                              xs: "0px 5px",
-                              sm: "0px 5px",
-                              md: "0px 5px",
-                              lg: "0px 10px",
-                              xl: "0px 10px",
-                            },
-                            fontSize: {
-                              xs: "0.7rem",
-                              sm: "0.7rem",
-                              md: "0.7rem",
-                              lg: "0.8rem",
-                              xl: "0.8rem",
-                            },
-                            fontWeight: "700",
-                          }}
-                        >
-                          25% OFF
-                        </Box>
-                      )}
-                      <Box
-                        display="flex"
-                        flexDirection="column"
-                        justifyContent="center"
-                        alignItems="flex-start"
-                        sx={{
-                          padding: "0px 20px",
-                          width: "100%",
-                          height: "auto",
+                      here
+                    </a>
+                  </span>{" "}
+                </Typography>
+              </motion.Box>
+            ) : (
+              <>
+                {[...data.data]
+                  .sort((a, b) => a.unit_amount - b.unit_amount)
+                  .filter(
+                    (product) => product.recurring !== null && product.active
+                  )
+                  .map((product, index) => {
+                    return (
+                      <motion.Paper
+                        key={index}
+                        elevation={5}
+                        initial={{
+                          opacity: 0,
+                          x: index % 2 === 0 ? -100 : 100,
                         }}
-                        gap="5px"
-                      >
-                        <Typography
-                          sx={{
-                            fontSize: innerContainerFotnSize,
-                            fontWeight: "700",
-                          }}
-                        >{`${
-                          product.recurring.interval === "month"
-                            ? "Monthly"
-                            : "Weekly"
-                        } ${product.product_name}`}</Typography>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            gap: "5px",
-                          }}
-                        >
-                          {product.recurring.interval === "month" && (
-                            <>
-                              <Typography
-                                sx={{
-                                  position: "relative",
-                                  fontSize: innerContainerFotnSize,
-                                  fontWeight: "400",
-                                  color: "rgba(0, 0, 0, 0.70)",
-                                }}
-                              >
-                                $32.99
-                              </Typography>
-                              <Box
-                                sx={{
-                                  position: "absolute",
-
-                                  width: {
-                                    xs: "40px",
-                                    sm: "45px",
-                                    md: "50px",
-                                    lg: "55px",
-                                    xl: "60px",
-                                  },
-                                  height: "1.5px",
-                                  transform: "rotate(-14.364deg)",
-                                  backgroundColor: "#E20909",
-                                  borderRadius: "5px",
-                                }}
-                              ></Box>
-                            </>
-                          )}
-
-                          <Typography
-                            sx={{
-                              fontSize: innerContainerFotnSize,
-                              fontWeight: "700",
-                              background:
-                                "linear-gradient(89deg, #0427C5 -0.31%, rgba(191, 5, 207, 0.90) 95.16%)",
-                              backgroundClip: "text",
-                              WebkitBackgroundClip: "text",
-                              WebkitTextFillColor: "transparent",
-                            }}
-                          >{`$${parseFloat(product.unit_amount / 100).toFixed(
-                            2
-                          )} / ${
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: 0 }}
+                        style={{
+                          backgroundColor:
                             product.recurring.interval === "month"
-                              ? "month"
-                              : "week"
-                          }`}</Typography>
-                        </Box>
-                        <Divider
-                          sx={{
-                            width: "100%",
-                            margin: {
-                              xs: "5px 0px 5px 0px",
-                              sm: "5px 0px 10px 0px",
-                              md: "5px 0px 15px 0px",
-                              lg: "5px 0px 20px 0px",
-                              xl: "5px 0px 20px 0px",
-                            },
-                          }}
-                        />
+                              ? "rgba(255, 255, 255, 0.80)"
+                              : "rgba(255, 255, 255, 0.40)",
+                          borderRadius: "16px",
+                          boxShadow: "0px 1px 1px 0px rgba(0, 0, 0, 0.15)",
+                        }}
+                      >
                         <Box
-                          key={index}
                           display="flex"
-                          flexDirection="row"
-                          justifyContent="flex-start"
+                          flexDirection="column"
+                          justifyContent="space-between"
                           alignItems="flex-start"
-                          sx={{ width: "auto" }}
+                          position="relative"
+                          sx={{
+                            padding: "20px 0px",
+                            maxWidth: "230px",
+                            height: "auto",
+                          }}
                           gap={innerContainerFotnSizeSmall}
                         >
-                          {/* <Check
-                                fontSize="small"
-                                sx={{ color: theme.palette.yellows[700] }}
-                              /> */}
-                          <CheckMark
-                            sx={{ fontSize: innerContainerFotnSizeSmall }}
-                          />
-                          <Typography
+                          {product.recurring.interval === "month" && (
+                            <Box
+                              sx={{
+                                position: "absolute",
+                                top: "-10px",
+                                right: "-10px",
+
+                                height: "22px",
+                                backgroundColor: "#CA0B4A",
+                                borderRadius: "5px",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                color: "white",
+                                padding: {
+                                  xs: "0px 5px",
+                                  sm: "0px 5px",
+                                  md: "0px 5px",
+                                  lg: "0px 10px",
+                                  xl: "0px 10px",
+                                },
+                                fontSize: {
+                                  xs: "0.7rem",
+                                  sm: "0.7rem",
+                                  md: "0.7rem",
+                                  lg: "0.8rem",
+                                  xl: "0.8rem",
+                                },
+                                fontWeight: "700",
+                              }}
+                            >
+                              25% OFF
+                            </Box>
+                          )}
+                          <Box
+                            display="flex"
+                            flexDirection="column"
+                            justifyContent="center"
+                            alignItems="flex-start"
                             sx={{
-                              fontSize: innerContainerFotnSizeSmall,
-                              color: "rgb(0, 0, 0)",
+                              padding: "0px 20px",
+                              width: "100%",
+                              height: "auto",
                             }}
+                            gap="5px"
                           >
-                            100 credits a day
-                          </Typography>
-                        </Box>
-                        <Typography
-                          sx={{
-                            fontSize: {
-                              xs: "0.6rem",
-                              sm: "0.6rem",
-                              md: "0.6rem",
-                              lg: "0.7rem",
-                              xl: "0.7rem",
-                            },
-                            color: "rgba(0, 0, 0, 0.50)",
-                            marginLeft: {
-                              xs: "1.8rem",
-                              sm: "1.8rem",
-                              md: "1.8rem",
-                              lg: "1.9rem",
-                              xl: "2rem",
-                            },
-                            marginTop: "-5px",
-                          }}
-                        >
-                          $0.008 per credit
-                        </Typography>
-                        {Object.keys(product.metadata).map((feature, index) => {
-                          return (
+                            <Typography
+                              sx={{
+                                fontSize: innerContainerFotnSize,
+                                fontWeight: "700",
+                              }}
+                            >{`${
+                              product.recurring.interval === "month"
+                                ? "Monthly"
+                                : "Weekly"
+                            } ${product.product_name}`}</Typography>
+                            <Box
+                              sx={{
+                                display: "flex",
+                                flexDirection: "row",
+                                alignItems: "center",
+                                gap: "5px",
+                              }}
+                            >
+                              {product.recurring.interval === "month" && (
+                                <>
+                                  <Typography
+                                    sx={{
+                                      position: "relative",
+                                      fontSize: innerContainerFotnSize,
+                                      fontWeight: "400",
+                                      color: "rgba(0, 0, 0, 0.70)",
+                                    }}
+                                  >
+                                    $32.99
+                                  </Typography>
+                                  <Box
+                                    sx={{
+                                      position: "absolute",
+
+                                      width: {
+                                        xs: "40px",
+                                        sm: "45px",
+                                        md: "50px",
+                                        lg: "55px",
+                                        xl: "60px",
+                                      },
+                                      height: "1.5px",
+                                      transform: "rotate(-14.364deg)",
+                                      backgroundColor: "#E20909",
+                                      borderRadius: "5px",
+                                    }}
+                                  ></Box>
+                                </>
+                              )}
+
+                              <Typography
+                                sx={{
+                                  fontSize: innerContainerFotnSize,
+                                  fontWeight: "700",
+                                  background:
+                                    "linear-gradient(89deg, #0427C5 -0.31%, rgba(191, 5, 207, 0.90) 95.16%)",
+                                  backgroundClip: "text",
+                                  WebkitBackgroundClip: "text",
+                                  WebkitTextFillColor: "transparent",
+                                }}
+                              >{`$${parseFloat(
+                                product.unit_amount / 100
+                              ).toFixed(2)} / ${
+                                product.recurring.interval === "month"
+                                  ? "month"
+                                  : "week"
+                              }`}</Typography>
+                            </Box>
+                            <Divider
+                              sx={{
+                                width: "100%",
+                                margin: {
+                                  xs: "5px 0px 5px 0px",
+                                  sm: "5px 0px 10px 0px",
+                                  md: "5px 0px 15px 0px",
+                                  lg: "5px 0px 20px 0px",
+                                  xl: "5px 0px 20px 0px",
+                                },
+                              }}
+                            />
                             <Box
                               key={index}
                               display="flex"
@@ -498,59 +506,116 @@ const Paywall = (props) => {
                                 fontSize="small"
                                 sx={{ color: theme.palette.yellows[700] }}
                               /> */}
-                              <CheckMark />
+                              <CheckMark
+                                sx={{ fontSize: innerContainerFotnSizeSmall }}
+                              />
                               <Typography
                                 sx={{
                                   fontSize: innerContainerFotnSizeSmall,
                                   color: "rgb(0, 0, 0)",
                                 }}
                               >
-                                {product.metadata[feature]}
+                                100 credits a day
                               </Typography>
                             </Box>
-                          );
-                        })}
-                      </Box>
-                      <Button
-                        variant="contained"
-                        sx={{
-                          alignSelf: "center",
-                          width: "auto",
+                            <Typography
+                              sx={{
+                                fontSize: {
+                                  xs: "0.6rem",
+                                  sm: "0.6rem",
+                                  md: "0.6rem",
+                                  lg: "0.7rem",
+                                  xl: "0.7rem",
+                                },
+                                color: "rgba(0, 0, 0, 0.50)",
+                                marginLeft: {
+                                  xs: "1.8rem",
+                                  sm: "1.8rem",
+                                  md: "1.8rem",
+                                  lg: "1.9rem",
+                                  xl: "2rem",
+                                },
+                                marginTop: "-5px",
+                              }}
+                            >
+                              $0.008 per credit
+                            </Typography>
+                            {Object.keys(product.metadata).map(
+                              (feature, index) => {
+                                return (
+                                  <Box
+                                    key={index}
+                                    display="flex"
+                                    flexDirection="row"
+                                    justifyContent="flex-start"
+                                    alignItems="flex-start"
+                                    sx={{ width: "auto" }}
+                                    gap={innerContainerFotnSizeSmall}
+                                  >
+                                    {/* <Check
+                                fontSize="small"
+                                sx={{ color: theme.palette.yellows[700] }}
+                              /> */}
+                                    <CheckMark />
+                                    <Typography
+                                      sx={{
+                                        fontSize: innerContainerFotnSizeSmall,
+                                        color: "rgb(0, 0, 0)",
+                                      }}
+                                    >
+                                      {product.metadata[feature]}
+                                    </Typography>
+                                  </Box>
+                                );
+                              }
+                            )}
+                          </Box>
+                          <Button
+                            variant="contained"
+                            sx={{
+                              alignSelf: "center",
+                              width: "auto",
 
-                          borderRadius: "6px",
-                          fontWeight: "700",
-                          fontSize: innerContainerFotnSizeSmall,
+                              borderRadius: "6px",
+                              fontWeight: "700",
+                              fontSize: innerContainerFotnSizeSmall,
 
-                          lineHeight: "18px",
-                          padding: "9px 30px",
-                          marginTop: "20px",
-                          background:
-                            "linear-gradient(89deg, rgba(4, 39, 197, 0.80) -0.31%, rgba(191, 5, 207, 0.72) 95.16%)",
+                              lineHeight: "18px",
+                              padding: "9px 30px",
+                              marginTop: "20px",
+                              background:
+                                "linear-gradient(89deg, rgba(4, 39, 197, 0.80) -0.31%, rgba(191, 5, 207, 0.72) 95.16%)",
 
-                          "&:hover": {
-                            backgroundColor: theme.palette.yellows[600],
-                          },
-                        }}
-                        onClick={() =>
-                          handleSubscribe(
-                            product.price_id,
-                            product.recurring.interval
-                          )
-                        }
-                        endIcon={
-                          <img src={forward} alt="arrowForward" width="15px" />
-                        }
-                      >
-                        {`BUY ${
-                          product.recurring.interval === "month"
-                            ? "MONTHLY"
-                            : "WEEKLY"
-                        }`}
-                      </Button>
-                    </Box>
-                  </motion.Paper>
-                );
-              })}
+                              "&:hover": {
+                                backgroundColor: theme.palette.yellows[600],
+                              },
+                            }}
+                            onClick={() =>
+                              handleSubscribe(
+                                product.price_id,
+                                product.recurring.interval
+                              )
+                            }
+                            endIcon={
+                              <img
+                                src={forward}
+                                alt="arrowForward"
+                                width="15px"
+                              />
+                            }
+                          >
+                            {`BUY ${
+                              product.recurring.interval === "month"
+                                ? "MONTHLY"
+                                : "WEEKLY"
+                            }`}
+                          </Button>
+                        </Box>
+                      </motion.Paper>
+                    );
+                  })}
+              </>
+            )}
           </Stack>
           {/* <Footer /> */}
         </CustomTabPanel>
