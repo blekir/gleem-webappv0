@@ -154,9 +154,10 @@ const Paywall = (props) => {
         useFlexGap
         sx={{
           flexWrap: "wrap",
-          justifyContent: "space-around",
+          justifyContent: "space-between",
           alignItems: "center",
           marginTop: "0px",
+          height: "100%",
         }}
       >
         <Box display="flex" flexDirection="column" alignItems="center">
@@ -292,8 +293,6 @@ const Paywall = (props) => {
                   flexDirection: "column",
                   alignItems: "center",
                   justifyContent: "center",
-                  height: "40vh",
-                  width: "30vw",
                 }}
               >
                 <Typography
