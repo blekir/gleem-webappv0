@@ -42,6 +42,7 @@ import photocolor from "../assets/photo_color.png";
 import SmallDialog from "./SmallDialog";
 import BuyMoreCredits from "./BuyMoreCredits";
 import { motion } from "motion/react";
+import { useLogoutMutation } from "api/apiSlice";
 
 const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const dispatch = useDispatch();
@@ -49,6 +50,7 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   const location = useLocation();
   const theme = useTheme();
   const { email } = useSelector((state) => state.authentication.user);
+  const [logoutMut] = useLogoutMutation();
 
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -60,6 +62,7 @@ const Navbar = ({ isSidebarOpen, setIsSidebarOpen }) => {
   };
 
   const handleLogout = () => {
+    logoutMut();
     dispatch(logout());
     navigate("/login");
   };

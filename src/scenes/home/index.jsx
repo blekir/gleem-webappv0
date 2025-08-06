@@ -23,21 +23,21 @@ const Home = () => {
 
   const [getUser] = useGetUserMutation();
 
-  useEffect(() => {
-    const userData = getUser().unwrap();
-    if (userData) {
-      console.log(userData);
-      dispatch(
-        setCredentials({
-          ...userData.data,
-          authenticated: true,
-        })
-      );
-      navigate("/create");
-    } else {
-      console.log("KUTAZ");
-    }
-  }, []);
+  // useEffect(() => {
+  //   const userData = getUser().unwrap();
+  //   if (userData) {
+  //     console.log(userData);
+  //     dispatch(
+  //       setCredentials({
+  //         ...userData.data,
+  //         authenticated: true,
+  //       })
+  //     );
+  //     navigate("/create");
+  //   } else {
+  //     console.log("KUTAZ");
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (productId && productsData) {

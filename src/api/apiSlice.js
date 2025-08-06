@@ -38,7 +38,8 @@ export const {
 } = apiSlice;
 
 // USER
-export const { useLoginMutation, useGoogleLoginMutation } = apiSlice;
+export const { useLoginMutation, useGoogleLoginMutation, useLogoutMutation } =
+  apiSlice;
 export const { useGetLorasQuery } = apiSlice;
 export const { useGetOrdersQuery } = apiSlice;
 export const { useGetOrderDetailsQuery } = apiSlice;
