@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import Products from "./Products";
 import ProductDetails from "./ProductDetails";
 import { Box } from "@mui/material";
-import { useGetProductsQuery } from "api/apiSlice";
+import { useGetProductsQuery, useGetUserMutation } from "api/apiSlice";
+import { setCredentials } from "state/auth";
 
 const Home = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [productDetailsOpen, setProductDetailsOpen] = useState(false);
-
+  const dispatch = useDispatch();
   const species = useSelector((state) => state.global.species);
   const gender = useSelector((state) => state.global.gender);
 
@@ -19,6 +20,24 @@ const Home = () => {
     species: species,
     gender: gender,
   });
+
+  const [getUser] = useGetUserMutation();
+
+  useEffect(() => {
+    const userData = getUser().unwrap();
+    if (userData) {
+      console.log(userData);
+      dispatch(
+        setCredentials({
+          ...userData.data,
+          authenticated: true,
+        })
+      );
+      navigate("/create");
+    } else {
+      console.log("KUTAZ");
+    }
+  }, []);
 
   useEffect(() => {
     if (productId && productsData) {

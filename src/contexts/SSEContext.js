@@ -24,7 +24,7 @@ export function SSEProvider({ children }) {
 
   const eventSourceRef = useRef(null);
 
-const { enqueueSnackbar } = useSnackbar();  
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -92,7 +92,13 @@ const { enqueueSnackbar } = useSnackbar();
   }, [isAuthenticated]);
 
   return (
-    <SSEContext.Provider value={{ orderProgressMap, nsfwFeedback }}>
+    <SSEContext.Provider
+      value={{
+        orderProgressMap,
+        nsfwFeedback,
+        cleanNsfwFeedback: () => setnsfwFeedback({}),
+      }}
+    >
       {children}
     </SSEContext.Provider>
   );

@@ -520,7 +520,7 @@ const Paywall = (props) => {
                           borderRadius: "6px",
                           fontWeight: "700",
                           fontSize: innerContainerFotnSizeSmall,
-                          fontFamily: "Inter",
+
                           lineHeight: "18px",
                           padding: "9px 30px",
                           marginTop: "20px",
@@ -913,7 +913,7 @@ const Paywall = (props) => {
                     borderRadius: "6px",
                     fontWeight: "700",
                     fontSize: innerContainerFotnSizeSmall,
-                    fontFamily: "Inter",
+
                     lineHeight: "18px",
                     padding: {
                       xs: "9px 10px",

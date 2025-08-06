@@ -47,6 +47,8 @@ export const authSlice = createSlice({
       };
     },
     logout: (state, action) => {
+      document.cookie =
+        "session=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
       return {
         ...state,
         user: initialState,

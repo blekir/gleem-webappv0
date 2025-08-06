@@ -41,6 +41,10 @@ function App() {
     theme: "stripe",
   };
 
+  useEffect(() => {
+    fetchUserData();
+  }, []);
+
   return (
     <div className="app">
       <BrowserRouter>
@@ -66,6 +70,7 @@ function AppRoutes({ isAuthenticated }) {
         }
       />
       <Route path="login" element={<Login />} />
+      <Route path="join" element={<Join />} />
       <Route path="join/:token" element={<Join />} />
 
       <Route element={<RequireAuth />}>
@@ -79,7 +84,7 @@ function AppRoutes({ isAuthenticated }) {
           <Route key={location.pathname} path="orders" element={<Orders />} />
           <Route path="/orders/:orderId" element={<Orders />} />
           <Route key={location.pathname} path="paywall" element={<Paywall />} />
-          <Route key={location.pathname} path="test" element={<Tester />} />
+          {/* <Route key={location.pathname} path="test" element={<Tester />} /> */}
           <Route path="/checkout/" element={<CheckoutForm />} />
           <Route path="/return" element={<Return />} />
           <Route path="/settings" element={<Settings />} />

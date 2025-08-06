@@ -8,7 +8,13 @@ export const userEndpoints = (builder) => {
         body: { ...credentials },
       }),
     }),
-
+    googleLogin: builder.mutation({
+      query: () => ({
+        url: "/user/google-login",
+        method: "get",
+        credentials: "include",
+      }),
+    }),
     getUser: builder.mutation({
       query: (credentials) => ({
         url: "/user/",

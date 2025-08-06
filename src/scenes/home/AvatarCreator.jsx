@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import Filter from "./Filter";
 import { useGlobalSpeciesGender } from "hooks/useGlobalSpeciesGender";
 
-const AvatarCreator = ({ type, images, setImages, maxFiles }) => {
+const AvatarCreator = ({ type, images, setImages, maxFiles, feedback }) => {
   const theme = useTheme();
 
   const { species, gender } = useGlobalSpeciesGender();
@@ -66,6 +66,7 @@ const AvatarCreator = ({ type, images, setImages, maxFiles }) => {
         style={{ display: "none" }}
         onChange={onChange}
       />
+
       <Stack
         direction={{ xs: "column", sm: "column" }}
         spacing={{ xs: 0.5, sm: 1, md: 1 }}
@@ -100,18 +101,31 @@ const AvatarCreator = ({ type, images, setImages, maxFiles }) => {
               justifyContent: "center",
             }}
           >
-            <Typography
-              fontSize={{ xs: "0.8em", sm: "1em" }}
-              sx={{
-                wordBreak: "break-word",
-                marginTop: "20px",
-                textAlign: "center",
-                padding: "10px 10px",
-              }}
-            >
-              Upload {maxFiles} {maxFiles === 1 ? "photo" : "photos"} to help us
-              train AI and create your personalized AI Avatar{" "}
-            </Typography>
+            {feedback === "" && (
+              <Typography
+                fontSize={{ xs: "0.8em", sm: "1em" }}
+                sx={{
+                  wordBreak: "break-word",
+                  marginTop: "20px",
+                  textAlign: "center",
+                  padding: "10px 10px",
+                }}
+              >
+                Upload {maxFiles} {maxFiles === 1 ? "photo" : "photos"} to help
+                us train AI and create your personalized AI Avatar{" "}
+              </Typography>
+            )}
+            {feedback !== "" && (
+              <>
+                <Typography sx={{ color: "red", marginTop: "20px" }}>
+                  <b>
+                    One of the image doesn't follow our guidelines, please
+                    remove it and try again.
+                  </b>
+                </Typography>
+                {/* <Typography sx={{ color: "red" }}>{feedback}</Typography> */}
+              </>
+            )}
             <Stack
               direction={{ xs: "column", sm: "row" }}
               spacing={{ xs: 0.5, sm: 1, md: 1 }}

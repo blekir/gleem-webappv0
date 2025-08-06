@@ -32,7 +32,6 @@ const ProductDetails = ({ data, open, setOpen }) => {
   const balance = useSelector((state) => state.authentication.user.balance);
 
   const { species, gender } = useGlobalSpeciesGender();
-  const { nsfwFeedback } = useSSE();
 
   const [generateProduct] = useGenerateProductMutation();
   const [bundleProduct] = useBundleProductMutation();
@@ -52,7 +51,7 @@ const ProductDetails = ({ data, open, setOpen }) => {
   const [images, setimages] = useState(Array(maxFiles).fill(null));
 
   const [bundleSubmitted, setbundleSubmitted] = useState(false);
-
+  const [feedback, setFeedback] = useState("");
   const steps =
     selectedLora !== "quick" &&
     selectedLora !== "normal" &&
@@ -106,6 +105,7 @@ const ProductDetails = ({ data, open, setOpen }) => {
           images={images}
           setImages={setimages}
           maxFiles={maxFiles}
+          feedback={feedback}
         />
       ),
     3: (
@@ -174,6 +174,7 @@ const ProductDetails = ({ data, open, setOpen }) => {
         product: data.name,
         batch: selectedBatch.batch,
         batch_size: selectedBatch.batch_size,
+        nsfw_only: false,
       };
       for (let i = 0; i < images.length; i++) {
         formData.append("files", images[i]);
@@ -185,14 +186,10 @@ const ProductDetails = ({ data, open, setOpen }) => {
       try {
         setbundleSubmitted(true);
         const resp = await bundleProduct(formData).unwrap();
-        const newBalance = balance - parseInt(selectedBatch.batch);
-        dispatch(deductCredits(newBalance));
       } catch {
         setbundleSubmitted(false);
       }
     }
-    setActiveStep(0);
-    setOpen(false);
   };
 
   useEffect(() => {
@@ -205,6 +202,7 @@ const ProductDetails = ({ data, open, setOpen }) => {
     } else if (
       activeStep === 2 &&
       selectedLora !== "quick" &&
+      selectedLora !== "normal" &&
       selectedLora !== "pro" &&
       selectedBatch.index !== -1
     ) {
@@ -212,20 +210,25 @@ const ProductDetails = ({ data, open, setOpen }) => {
     } else if (
       activeStep === 2 &&
       selectedLora !== "quick" &&
+      selectedLora !== "normal" &&
       selectedLora !== "pro" &&
       selectedBatch.index === -1
     ) {
       setdisableNext(true);
     } else if (
       activeStep === 2 &&
-      (selectedLora === "quick" || selectedLora === "pro") &&
+      (selectedLora === "quick" ||
+        selectedLora === "normal" ||
+        selectedLora === "pro") &&
       images.some((element) => element === null) === false
     ) {
       console.log("all images uploaded", images);
       setdisableNext(false);
     } else if (
       activeStep === 2 &&
-      (selectedLora === "quick" || selectedLora === "pro") &&
+      (selectedLora === "quick" ||
+        selectedLora === "normal" ||
+        selectedLora === "pro") &&
       images.some((element) => element === null) === true
     ) {
       setdisableNext(true);
@@ -275,8 +278,9 @@ const ProductDetails = ({ data, open, setOpen }) => {
       ) : (
         <BundleVerify
           setbundleSubmitted={setbundleSubmitted}
-          nsfwFeedback={nsfwFeedback}
           setActiveStep={setActiveStep}
+          setFeedback={setFeedback}
+          selectedBatch={selectedBatch}
         />
       )}
     </SteppedDialog>
@@ -285,27 +289,45 @@ const ProductDetails = ({ data, open, setOpen }) => {
 
 export default ProductDetails;
 
-const BundleVerify = ({ setbundleSubmitted, nsfwFeedback, setActiveStep }) => {
-  const [info, setinfo] = useState("uploading images");
+const BundleVerify = ({
+  setbundleSubmitted,
+  setActiveStep,
+  setFeedback,
+  selectedBatch,
+}) => {
+  const balance = useSelector((state) => state.authentication.user.balance);
+  const dispatch = useDispatch();
+  const { nsfwFeedback, cleanNsfwFeedback } = useSSE();
+  const [info, setinfo] = useState("uploading images...");
   const navigate = useNavigate();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setinfo("checking images");
-    }, 5000); // Change after 3 seconds
+      setinfo("checking images...");
+    }, 2000); // Change after 3 seconds
 
     return () => clearTimeout(timer); // Cleanup on unmount
   }, []);
 
   useEffect(() => {
+    console.log(nsfwFeedback);
     if (nsfwFeedback.hasOwnProperty("nsfw_check_passed")) {
       if (nsfwFeedback.nsfw_check_passed) {
         console.log("passed");
+        const newBalance = balance - parseInt(selectedBatch.batch);
+        dispatch(deductCredits(newBalance));
         navigate("/orders");
+        setbundleSubmitted(false);
+        setActiveStep(0);
+        setFeedback("");
+        cleanNsfwFeedback();
       } else {
         console.log("not passed");
         setbundleSubmitted(false);
-        setActiveStep((current) => current - 1);
+        setActiveStep(2);
+
+        setFeedback(nsfwFeedback.reasons.join(",\n "));
+        cleanNsfwFeedback();
       }
     }
   }, [nsfwFeedback]);

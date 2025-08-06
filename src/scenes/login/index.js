@@ -2,9 +2,9 @@ import { useRef, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setCredentials, logout } from "state/auth";
-import { useLoginMutation } from "api/apiSlice";
+import { useLoginMutation, useGoogleLoginMutation } from "api/apiSlice";
 
-import { Box, CircularProgress, useTheme } from "@mui/material";
+import { Box, CircularProgress, Divider, useTheme } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -16,6 +16,7 @@ import Container from "@mui/material/Container";
 import { useSnackbar } from "notistack";
 
 import logo from "../../assets/logo.webp";
+import GoogleIcon from "@mui/icons-material/Google";
 
 const Login = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -31,6 +32,8 @@ const Login = () => {
   const theme = useTheme();
 
   const [login, { isLoading }] = useLoginMutation();
+  const [googleLogin, { isLoading: isGoogleLoading }] =
+    useGoogleLoginMutation();
 
   useEffect(() => {
     emailRef.current.focus();
@@ -61,6 +64,14 @@ const Login = () => {
         variant: "error",
       });
     }
+  };
+
+  const handleGoogleLogin = async () => {
+    // const userData = await googleLogin().unwrap();
+    // dispatch(setCredentials(userData.data));
+    // navigate("/create");
+
+    window.location.href = "https://rest-as.garagefarm.net/user/google-login";
   };
 
   const content = isLoading ? (
@@ -97,14 +108,64 @@ const Login = () => {
           alignItems: "center",
         }}
       >
-        <img src={logo} alt="GLEEM AI"></img>
+        {/* <img src={logo} alt="GLEEM AI"></img> */}
         <Avatar sx={{ m: 1, bgcolor: theme.palette.yellows[700] }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5" sx={{ color: "#fff" }}>
-          Sign in
+
+        <Typography component="h1" variant="h5">
+          Log in
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "5px",
+              mt: 2,
+            }}
+          >
+            <Button
+              variant="contained"
+              color="primary"
+              startIcon={<GoogleIcon />}
+              onClick={handleGoogleLogin}
+              sx={{
+                justifySelf: "center",
+                width: "100%",
+                mb: 1,
+                backgroundColor: theme.palette.yellows[700],
+                color: theme.palette.getContrastText(
+                  theme.palette.yellows[700]
+                ),
+                "&:hover": {
+                  backgroundColor: theme.palette.yellows[800],
+                },
+                "&:active": {
+                  backgroundColor: theme.palette.yellows[900],
+                },
+              }}
+            >
+              Continue with Google
+            </Button>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                gap: "15px",
+                justifyContent: "center",
+                alignItems: "center",
+                width: "100%",
+              }}
+            >
+              <Divider sx={{ width: "10%" }} />
+              <Typography sx={{ textAlign: "center", width: "auto" }}>
+                or log in with your email
+              </Typography>
+              <Divider sx={{ width: "10%" }} />
+            </Box>
+          </Box>
           <TextField
             margin="normal"
             required
@@ -164,6 +225,46 @@ const Login = () => {
               onClick={() => navigate("/join")}
             >
               Create account
+            </Typography>
+          </Box>
+          <Box
+            sx={{ display: "flex", flexDirection: "column", gap: "5px", mt: 4 }}
+          >
+            <Typography
+              sx={{ textAlign: "center", color: theme.palette.grey[700] }}
+            >
+              By signing up, you agree to our
+            </Typography>
+            <Typography
+              sx={{ textAlign: "center", color: theme.palette.grey[700] }}
+            >
+              <span>
+                <a
+                  href="https://gleem.ai/terms-of-service"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    textDecoration: "none",
+                    color: theme.palette.yellows[700],
+                  }}
+                >
+                  Terms of Service
+                </a>
+              </span>{" "}
+              and{" "}
+              <span>
+                <a
+                  href="https://gleem.ai/terms-of-service#privacy-policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    textDecoration: "none",
+                    color: theme.palette.yellows[700],
+                  }}
+                >
+                  Privacy Policy
+                </a>
+              </span>
             </Typography>
           </Box>
         </Box>

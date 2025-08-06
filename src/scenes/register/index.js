@@ -153,11 +153,11 @@ const Join = () => {
           alignItems: "center",
         }}
       >
-        <img src={logo} alt="GLEEM AI"></img>
+        {/* <img src={logo} alt="GLEEM AI"></img> */}
         <Avatar sx={{ m: 1, bgcolor: theme.palette.yellows[700] }}>
           <LockOutlinedIcon />
         </Avatar>
-        <Typography component="h1" variant="h5" sx={{ color: "#fff" }}>
+        <Typography component="h1" variant="h5">
           Sign in
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -270,7 +270,47 @@ const Join = () => {
               sx={{ color: theme.palette.yellows[700], cursor: "pointer" }}
               onClick={() => navigate("/login")}
             >
-              Sign in
+              Log in
+            </Typography>
+          </Box>
+          <Box
+            sx={{ display: "flex", flexDirection: "column", gap: "5px", mt: 4 }}
+          >
+            <Typography
+              sx={{ textAlign: "center", color: theme.palette.grey[700] }}
+            >
+              By signing up, you agree to our
+            </Typography>
+            <Typography
+              sx={{ textAlign: "center", color: theme.palette.grey[700] }}
+            >
+              <span>
+                <a
+                  href="https://gleem.ai/terms-of-service"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    textDecoration: "none",
+                    color: theme.palette.yellows[700],
+                  }}
+                >
+                  Terms of Service
+                </a>
+              </span>{" "}
+              and{" "}
+              <span>
+                <a
+                  href="https://gleem.ai/terms-of-service#privacy-policy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    textDecoration: "none",
+                    color: theme.palette.yellows[700],
+                  }}
+                >
+                  Privacy Policy
+                </a>
+              </span>
             </Typography>
           </Box>
         </Box>

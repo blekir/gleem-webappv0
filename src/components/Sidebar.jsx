@@ -183,7 +183,6 @@ const Sidebar = ({
                           primary={name}
                           primaryTypographyProps={{
                             sx: {
-                              fontFamily: "Inter",
                               color:
                                 active === url
                                   ? theme.palette.primary[1000]
